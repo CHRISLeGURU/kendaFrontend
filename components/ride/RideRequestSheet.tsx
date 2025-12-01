@@ -12,13 +12,15 @@ interface RideRequestSheetProps {
     onClose?: () => void;
     destination?: [number, number] | null;
     distance?: number;
+    onOrder?: () => void;
 }
 
 export const RideRequestSheet = ({
     isOpen = true,
     onClose,
     destination: externalDestination,
-    distance: externalDistance = 0
+    distance: externalDistance = 0,
+    onOrder
 }: RideRequestSheetProps) => {
     const [estimatedPrice, setEstimatedPrice] = useState<number | null>(null);
     const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
@@ -142,6 +144,7 @@ export const RideRequestSheet = ({
                 {/* Action Button */}
                 <Button
                     disabled={!externalDestination || !estimatedPrice}
+                    onClick={onOrder}
                     className="w-full h-14 text-lg font-bold bg-[#F0B90B] text-black hover:bg-[#F0B90B]/90 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Order Taxi

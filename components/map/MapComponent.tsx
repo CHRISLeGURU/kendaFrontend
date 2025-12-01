@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, Polyline } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -9,6 +9,16 @@ import "leaflet/dist/leaflet.css";
 const iconUrl = "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png";
 const iconRetinaUrl = "https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon-2x.png";
 const shadowUrl = "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png";
+
+// Route Path Options (Yellow, Solid, Thick)
+const ROUTE_OPTIONS = {
+    color: "#F0B90B",
+    weight: 5,
+    opacity: 1,
+    lineCap: "round" as const,
+    lineJoin: "round" as const,
+    dashArray: undefined, // Solid line
+};
 
 // Custom User Icon (Yellow with Pulse)
 const createUserIcon = () => {
@@ -142,6 +152,9 @@ const MapComponent = ({ onDestinationChange }: MapComponentProps) => {
         }
     };
 
+    // Calculate route path (simple straight line for now, but using Polyline)
+    const routePath = position && destination ? [position, destination] : [];
+
     if (!position) {
         return (
             <div className="w-full h-full flex items-center justify-center bg-[#0C0C0C] text-white">
@@ -165,6 +178,14 @@ const MapComponent = ({ onDestinationChange }: MapComponentProps) => {
 
             <RecenterMap position={position} />
             <MapClickHandler onDestinationSelect={handleDestinationSelect} />
+
+            {/* Route Polyline */}
+            {routePath.length > 0 && (
+                <Polyline
+                    positions={routePath as L.LatLngExpression[]}
+                    pathOptions={ROUTE_OPTIONS}
+                />
+            )}
 
             {/* User Marker */}
             <Marker position={position} icon={createUserIcon()}>
