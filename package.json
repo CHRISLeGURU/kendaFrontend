@@ -12,6 +12,7 @@
     "@meshsdk/core": "^1.5.0",
     "@meshsdk/react": "^1.5.0",
     "clsx": "^2.1.0",
+    "framer-motion": "^12.23.25",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.294.0",
     "next": "^14",
@@ -21,7 +22,7 @@
     "tailwind-merge": "^2.2.0"
   },
   "devDependencies": {
-    "@types/leaflet": "^1.9.8",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
