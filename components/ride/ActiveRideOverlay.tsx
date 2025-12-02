@@ -29,7 +29,7 @@ export const ActiveRideOverlay = ({
                 <div className="flex items-start justify-between">
                     <div className="flex flex-col">
                         <span className="text-[#9A9A9A] text-sm font-medium font-sans mb-1">
-                            Arrivée estimée
+                            Estimated Arrival
                         </span>
                         <div className="flex items-baseline gap-2">
                             <span className="text-4xl font-bold text-white font-heading">
@@ -40,7 +40,7 @@ export const ActiveRideOverlay = ({
                             </span>
                         </div>
                         <span className="text-[#F0B90B] text-sm font-medium mt-1">
-                            Arrivée à {arrivalTime}
+                            Arrival at {arrivalTime}
                         </span>
                     </div>
 
