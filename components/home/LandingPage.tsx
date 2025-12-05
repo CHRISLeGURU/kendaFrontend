@@ -19,7 +19,7 @@ export function LandingPage() {
                 <div className="container mx-auto px-6 h-20 flex items-center justify-between">
                     <div className="flex flex-col">
                         <span className="text-2xl font-heading font-bold text-white tracking-tight">KENDA</span>
-                        <span className="text-[10px] text-[#9A9A9A] uppercase tracking-widest font-medium">Safe Mobility</span>
+                        <span className="text-[10px] text-[#9A9A9A] uppercase tracking-widest font-medium">Mobilité Sûre</span>
                     </div>
                     <div className="flex items-center gap-4">
                         <Link href="/login">

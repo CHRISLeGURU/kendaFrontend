@@ -17,7 +17,7 @@ export function WalletScreen() {
             {/* Header */}
             <header className="sticky top-0 z-10 bg-black/80 backdrop-blur-md -mx-4 px-4 py-4 mb-6 border-b border-[#1A1A1A]">
                 <h1 className="text-xl font-heading font-bold text-white text-center">
-                    Wallet
+                    Portefeuille
                 </h1>
             </header>
 
@@ -140,7 +140,7 @@ export function WalletScreen() {
                             </div>
 
                             <h2 className="text-2xl font-heading font-bold text-white mb-3">
-                                Connectez votre Wallet
+                                Connectez votre Portefeuille
                             </h2>
                             <p className="text-[#9A9A9A] mb-8 max-w-xs mx-auto leading-relaxed">
                                 Connectez votre portefeuille Cardano pour payer vos courses et recevoir des récompenses KENDA.
@@ -150,7 +150,7 @@ export function WalletScreen() {
                                 onClick={() => setIsConnected(true)}
                                 className="w-full max-w-xs h-14 bg-[#F0B90B] text-black font-bold text-lg rounded-xl shadow-lg hover:bg-[#F0B90B]/90"
                             >
-                                Connecter Wallet
+                                Connecter Portefeuille
                             </Button>
 
                             <p className="mt-6 text-xs text-[#555]">

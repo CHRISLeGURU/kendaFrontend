@@ -16,7 +16,7 @@ export function DesktopSidebar() {
 
     const navItems = [
         {
-            label: "Home",
+            label: "Accueil",
             href: "/map",
             icon: Home,
         },
@@ -26,7 +26,7 @@ export function DesktopSidebar() {
             icon: Clock,
         },
         {
-            label: "Wallet",
+            label: "Portefeuille",
             href: "/wallet",
             icon: Wallet,
         },
