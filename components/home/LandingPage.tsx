@@ -24,7 +24,7 @@ export function LandingPage() {
                     <div className="flex items-center gap-4">
                         <Link href="/login">
                             <Button variant="outline" className="hidden sm:flex border-white/20 text-white hover:bg-white hover:text-black rounded-full px-6 transition-all">
-                                S'inscrire
+                                S&apos;inscrire
                             </Button>
                         </Link>
                         <Link href="/login">
@@ -62,7 +62,7 @@ export function LandingPage() {
 
                             <p className="text-lg text-[#9A9A9A] mb-10 leading-relaxed max-w-lg">
                                 La première plateforme de VTC et de gestion de contraventions sécurisée par la Blockchain.
-                                Fini les disputes, fini l'insécurité.
+                                Fini les disputes, fini l&apos;insécurité.
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4">

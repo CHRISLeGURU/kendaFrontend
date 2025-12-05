@@ -31,7 +31,7 @@ export const RideRatingScreen = ({ price, onComplete }: RideRatingProps) => {
                         Vous êtes arrivé !
                     </h1>
                     <p className="text-[#9A9A9A] text-lg">
-                        Merci d'avoir voyagé avec Kenda.
+                        Merci d&apos;avoir voyagé avec Kenda.
                     </p>
                 </div>
 
@@ -44,7 +44,7 @@ export const RideRatingScreen = ({ price, onComplete }: RideRatingProps) => {
 
                 {/* Rating Stars */}
                 <div className="flex flex-col items-center space-y-4 w-full">
-                    <p className="text-white font-medium">Comment s'est passé votre trajet ?</p>
+                    <p className="text-white font-medium">Comment s&apos;est passé votre trajet ?</p>
                     <div className="flex items-center gap-3">
                         {[1, 2, 3, 4, 5].map((star) => (
                             <button
