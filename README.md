@@ -116,7 +116,7 @@ Une équipe passionnée dédiée à l'innovation technologique en Afrique.
 | :--- | :--- | :--- |
 | **Team Lead Frontend** | **Peter** | Architecture Globale, Map Integration, Core Logic. |
 | **Ride Logic** | **Kévin & Anderson** | Algorithmes de matching, Flux VTC, États de course. |
-| **UI & Profil** | **Dieu** | Design System, Expérience Utilisateur, Dashboard. |
+| **UI & Profil** | **Dieume** | Design System, Expérience Utilisateur, Dashboard. |
 | **Module Police** | **Dek & Chris** | Logique de contraventions, Interface Autorité. |
 | **Documentation** | **Joël** | Rédaction technique, Présentation, Pitch. |
 
