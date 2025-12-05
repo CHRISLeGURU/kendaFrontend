@@ -57,7 +57,7 @@ export const DriverTrustCard = ({
                             <div className="flex items-center gap-1 bg-[#F0B90B]/10 px-2 py-0.5 rounded-full border border-[#F0B90B]/20">
                                 <BadgeCheck className="w-3 h-3 text-[#F0B90B]" />
                                 <span className="text-[10px] font-bold text-[#F0B90B] uppercase tracking-wide">
-                                    Vérifié
+                                    Verified
                                 </span>
                             </div>
                         )}
