@@ -20,6 +20,7 @@ export const metadata: Metadata = {
 };
 
 import { MobileNavBar } from "@/components/layout/MobileNavBar";
+import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
 
 export default function RootLayout({
     children,
@@ -28,8 +29,11 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" className="dark">
-            <body className={`${inter.variable} ${manrope.variable} antialiased h-dvh w-screen overflow-hidden bg-black text-white`}>
-                {children}
+            <body className={`${inter.variable} ${manrope.variable} antialiased h-dvh w-screen overflow-hidden bg-black text-white flex`}>
+                <DesktopSidebar />
+                <div className="flex-1 h-full w-full md:pl-64 transition-all duration-300 relative">
+                    {children}
+                </div>
                 <MobileNavBar />
             </body>
         </html>
