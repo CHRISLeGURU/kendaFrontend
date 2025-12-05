@@ -82,7 +82,7 @@ export const RideRequestSheet = ({
 
                 {/* Title */}
                 <h2 className="text-2xl font-heading font-bold text-white mb-6">
-                    Order a ride
+                    Commander une course
                 </h2>
 
                 {/* Inputs Section */}
@@ -93,7 +93,7 @@ export const RideRequestSheet = ({
                             <Navigation className="w-5 h-5 fill-current" />
                         </div>
                         <Input
-                            defaultValue="My current location"
+                            defaultValue="Ma position actuelle"
                             className="pl-12 bg-[#151515] border-[#1A1A1A] text-white placeholder:text-[#9A9A9A] focus-visible:ring-[#F0B90B]/50"
                             readOnly
                         />
@@ -107,11 +107,11 @@ export const RideRequestSheet = ({
                         <div className="pl-12 pr-4 h-11 bg-[#151515] border border-[#1A1A1A] text-white rounded-button flex items-center">
                             {externalDestination ? (
                                 <span className="text-sm">
-                                    Destination selected ({externalDistance.toFixed(2)} km)
+                                    Destination sélectionnée ({externalDistance.toFixed(2)} km)
                                 </span>
                             ) : (
                                 <span className="text-[#9A9A9A] text-sm">
-                                    Click on the map to select destination
+                                    Cliquez sur la carte pour choisir la destination
                                 </span>
                             )}
                         </div>
@@ -122,7 +122,7 @@ export const RideRequestSheet = ({
                 {estimatedPrice && estimatedTime ? (
                     <div className="flex items-center justify-between mb-8 px-1">
                         <div className="flex flex-col">
-                            <span className="text-[#9A9A9A] text-sm font-medium mb-1">Estimated price</span>
+                            <span className="text-[#9A9A9A] text-sm font-medium mb-1">Prix estimé</span>
                             <span className="text-3xl font-bold text-white font-heading">
                                 {estimatedPrice.toLocaleString()} FC
                             </span>
@@ -136,7 +136,7 @@ export const RideRequestSheet = ({
                 ) : (
                     <div className="mb-8 px-1 py-4 text-center">
                         <span className="text-[#9A9A9A] text-sm">
-                            Enter a destination to see price estimate
+                            Entrez une destination pour voir l'estimation du prix
                         </span>
                     </div>
                 )}
@@ -147,7 +147,7 @@ export const RideRequestSheet = ({
                     onClick={onOrder}
                     className="w-full h-14 text-lg font-bold bg-[#F0B90B] text-black hover:bg-[#F0B90B]/90 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    Order Taxi
+                    Commander un Taxi
                 </Button>
             </motion.div>
         </div>

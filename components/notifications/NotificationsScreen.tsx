@@ -70,6 +70,7 @@ export function NotificationsScreen() {
                 <Button
                     variant="ghost"
                     className="text-[#F0B90B] hover:text-[#F0B90B]/80 hover:bg-[#F0B90B]/10 text-xs font-bold h-8 px-3"
+                    onClick={() => alert("Fonctionnalité à venir")}
                 >
                     Tout marquer comme lu
                 </Button>

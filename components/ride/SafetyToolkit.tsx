@@ -13,8 +13,8 @@ export const SafetyToolkit = () => {
         if (navigator.share) {
             try {
                 await navigator.share({
-                    title: 'My Ride with Kenda',
-                    text: 'Follow my ride in real-time!',
+                    title: 'Mon trajet avec Kenda',
+                    text: 'Suivez mon trajet en temps réel !',
                     url: window.location.href,
                 });
             } catch (error) {
@@ -22,16 +22,16 @@ export const SafetyToolkit = () => {
             }
         } else {
             // Fallback
-            alert("Link copied to clipboard!");
+            alert("Lien copié dans le presse-papier !");
         }
         setIsOpen(false);
     };
 
     const handleEmergency = () => {
         // Simulate emergency alert
-        const confirmed = window.confirm("Are you sure you want to trigger an EMERGENCY ALERT?");
+        const confirmed = window.confirm("Êtes-vous sûr de vouloir déclencher une ALERTE D'URGENCE ?");
         if (confirmed) {
-            alert("EMERGENCY ALERT SENT! Authorities and emergency contacts have been notified.");
+            alert("ALERTE D'URGENCE ENVOYÉE ! Les autorités et vos contacts d'urgence ont été notifiés.");
             setIsOpen(false);
         }
     };
@@ -78,7 +78,7 @@ export const SafetyToolkit = () => {
                                         <ShieldAlert className="w-6 h-6 text-[#FF4747]" />
                                     </div>
                                     <h2 className="text-xl font-heading font-bold text-white">
-                                        Safety Center
+                                        Centre de Sécurité
                                     </h2>
                                 </div>
                                 <button
@@ -98,7 +98,7 @@ export const SafetyToolkit = () => {
                                     className="w-full h-14 justify-start gap-4 text-lg font-medium border-[#F0B90B] text-[#F0B90B] hover:bg-[#F0B90B]/10 hover:text-[#F0B90B] bg-transparent"
                                 >
                                     <Share2 className="w-5 h-5" />
-                                    Share my ride
+                                    Partager ma course
                                 </Button>
 
                                 {/* Emergency SOS */}
@@ -107,11 +107,11 @@ export const SafetyToolkit = () => {
                                     className="w-full h-16 justify-start gap-4 text-lg font-bold bg-[#FF4747] hover:bg-[#FF4747]/90 text-white shadow-[0_0_20px_rgba(255,71,71,0.3)] animate-pulse"
                                 >
                                     <PhoneCall className="w-6 h-6" />
-                                    EMERGENCY SOS
+                                    SOS URGENCE
                                 </Button>
 
                                 <p className="text-center text-xs text-[#555] mt-4">
-                                    Only use SOS in case of immediate danger. False alarms may result in account suspension.
+                                    N'utilisez le SOS qu'en cas de danger immédiat. Les fausses alertes peuvent entraîner la suspension du compte.
                                 </p>
                             </div>
                         </motion.div>

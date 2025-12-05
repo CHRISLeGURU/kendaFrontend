@@ -17,7 +17,7 @@ export function WalletScreen() {
             {/* Header */}
             <header className="sticky top-0 z-10 bg-black/80 backdrop-blur-md -mx-4 px-4 py-4 mb-6 border-b border-[#1A1A1A]">
                 <h1 className="text-xl font-heading font-bold text-white text-center">
-                    Wallet
+                    Portefeuille
                 </h1>
             </header>
 
@@ -93,6 +93,7 @@ export function WalletScreen() {
                             <div className="grid grid-cols-2 gap-4">
                                 <Button
                                     className="h-14 bg-[#F0B90B] text-black hover:bg-[#F0B90B]/90 border-0 font-bold text-base rounded-xl shadow-lg shadow-[#F0B90B]/10"
+                                    onClick={() => alert("Fonctionnalité à venir")}
                                 >
                                     <Plus className="w-5 h-5 mr-2" />
                                     Recharger
@@ -100,6 +101,7 @@ export function WalletScreen() {
                                 <Button
                                     variant="secondary"
                                     className="h-14 bg-[#1A1A1A] text-white hover:bg-[#252525] border border-[#333] font-medium text-base rounded-xl"
+                                    onClick={() => alert("Fonctionnalité à venir")}
                                 >
                                     <List className="w-5 h-5 mr-2 text-[#9A9A9A]" />
                                     Historique
@@ -138,7 +140,7 @@ export function WalletScreen() {
                             </div>
 
                             <h2 className="text-2xl font-heading font-bold text-white mb-3">
-                                Connectez votre Wallet
+                                Connectez votre Portefeuille
                             </h2>
                             <p className="text-[#9A9A9A] mb-8 max-w-xs mx-auto leading-relaxed">
                                 Connectez votre portefeuille Cardano pour payer vos courses et recevoir des récompenses KENDA.
@@ -148,7 +150,7 @@ export function WalletScreen() {
                                 onClick={() => setIsConnected(true)}
                                 className="w-full max-w-xs h-14 bg-[#F0B90B] text-black font-bold text-lg rounded-xl shadow-lg hover:bg-[#F0B90B]/90"
                             >
-                                Connecter Wallet
+                                Connecter Portefeuille
                             </Button>
 
                             <p className="mt-6 text-xs text-[#555]">

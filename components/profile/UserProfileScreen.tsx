@@ -107,7 +107,7 @@ export function UserProfileScreen() {
                                 <Wallet className="w-4 h-4 text-accent" />
                                 <span>Solde Portefeuille</span>
                             </div>
-                            <Button variant="ghost" size="sm" className="h-8 text-accent hover:text-accent hover:bg-accent/10 px-2 -mr-2">
+                            <Button variant="ghost" size="sm" className="h-8 text-accent hover:text-accent hover:bg-accent/10 px-2 -mr-2" onClick={() => alert("Fonctionnalité à venir")}>
                                 historique <ChevronRight className="w-4 h-4 ml-1" />
                             </Button>
                         </div>
@@ -115,7 +115,7 @@ export function UserProfileScreen() {
                             <div className="text-3xl font-heading font-bold text-foreground mb-4">
                                 12.500 <span className="text-lg text-foreground-secondary font-sans font-medium">FC</span>
                             </div>
-                            <Button className="w-full h-12 font-bold shadow-lg shadow-accent/20">
+                            <Button className="w-full h-12 font-bold shadow-lg shadow-accent/20" onClick={() => alert("Fonctionnalité à venir")}>
                                 <CreditCard className="w-4 h-4 mr-2" />
                                 Recharger mon compte
                             </Button>
@@ -132,18 +132,22 @@ export function UserProfileScreen() {
                         <MenuItem
                             icon={<User className="w-5 h-5" />}
                             label="Informations personnelles"
+                            onClick={() => alert("Fonctionnalité à venir")}
                         />
                         <MenuItem
                             icon={<Settings className="w-5 h-5" />}
                             label="Préférences de l'application"
+                            onClick={() => alert("Fonctionnalité à venir")}
                         />
                         <MenuItem
                             icon={<Shield className="w-5 h-5" />}
                             label="Confidentialité et sécurité"
+                            onClick={() => alert("Fonctionnalité à venir")}
                         />
                         <MenuItem
                             icon={<HelpCircle className="w-5 h-5" />}
                             label="Aide & Support"
+                            onClick={() => alert("Fonctionnalité à venir")}
                         />
                     </div>
                 </div>
@@ -154,7 +158,7 @@ export function UserProfileScreen() {
                         <h3 className="text-sm font-bold text-foreground-secondary uppercase tracking-wider">
                             Derniers Trajets
                         </h3>
-                        <Button variant="ghost" size="sm" className="h-auto p-0 text-accent hover:bg-transparent">
+                        <Button variant="ghost" size="sm" className="h-auto p-0 text-accent hover:bg-transparent" onClick={() => alert("Fonctionnalité à venir")}>
                             Tout voir
                         </Button>
                     </div>
@@ -167,7 +171,7 @@ export function UserProfileScreen() {
                 </div>
 
                 {/* Logout Button */}
-                <Button variant="outline" className="w-full border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive h-12 mt-4">
+                <Button variant="outline" className="w-full border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive h-12 mt-4" onClick={() => alert("Fonctionnalité à venir")}>
                     <LogOut className="w-4 h-4 mr-2" />
                     Se déconnecter
                 </Button>

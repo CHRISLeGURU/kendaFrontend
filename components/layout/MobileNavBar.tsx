@@ -15,7 +15,7 @@ export function MobileNavBar() {
 
     const navItems = [
         {
-            label: "Home",
+            label: "Accueil",
             href: "/map",
             icon: Home,
         },
@@ -25,7 +25,7 @@ export function MobileNavBar() {
             icon: Clock,
         },
         {
-            label: "Wallet",
+            label: "Portefeuille",
             href: "/wallet",
             icon: Wallet,
         },

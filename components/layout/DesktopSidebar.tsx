@@ -16,7 +16,7 @@ export function DesktopSidebar() {
 
     const navItems = [
         {
-            label: "Home",
+            label: "Accueil",
             href: "/map",
             icon: Home,
         },
@@ -26,7 +26,7 @@ export function DesktopSidebar() {
             icon: Clock,
         },
         {
-            label: "Wallet",
+            label: "Portefeuille",
             href: "/wallet",
             icon: Wallet,
         },
@@ -94,6 +94,7 @@ export function DesktopSidebar() {
                 <Button
                     variant="ghost"
                     className="w-full justify-start text-red-500 hover:text-red-400 hover:bg-red-500/10 h-12"
+                    onClick={() => alert("Fonctionnalité à venir")}
                 >
                     <LogOut className="w-4 h-4 mr-3" />
                     Déconnexion
