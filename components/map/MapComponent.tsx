@@ -188,7 +188,7 @@ const MapComponent = ({ onDestinationChange }: MapComponentProps) => {
         } else {
             setRoutePath([]);
         }
-    }, [position, destination]); // Remove onDestinationChange from dependency to avoid loop if it's not memoized
+    }, [position, destination, onDestinationChange]);
 
     if (!position) {
         return (
