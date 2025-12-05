@@ -1,15 +1,25 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { Menu, Loader2, ArrowLeft } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import MapComponent from "@/components/map/MapComponent";
 import { RideRequestSheet } from "@/components/ride/RideRequestSheet";
 import { DriverTrustCard } from "@/components/driver/DriverTrustCard";
 import { ActiveRideOverlay } from "@/components/ride/ActiveRideOverlay";
 import { RideRatingScreen } from "@/components/ride/RideRatingScreen";
 import { SafetyToolkit } from "@/components/ride/SafetyToolkit";
 import { Button } from "@/components/ui/button";
+
+// Dynamic import with SSR disabled to avoid "window is not defined" error from Leaflet
+const MapComponent = dynamic(() => import("@/components/map/MapComponent"), {
+    ssr: false,
+    loading: () => (
+        <div className="w-full h-full flex items-center justify-center bg-[#0C0C0C] text-white">
+            <Loader2 className="w-8 h-8 animate-spin text-[#F0B90B]" />
+        </div>
+    ),
+});
 
 type Step = 'IDLE' | 'SELECTING' | 'SEARCHING' | 'RIDE_ACTIVE' | 'RIDE_COMPLETED';
 

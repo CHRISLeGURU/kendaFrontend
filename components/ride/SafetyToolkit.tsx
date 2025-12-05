@@ -111,7 +111,7 @@ export const SafetyToolkit = () => {
                                 </Button>
 
                                 <p className="text-center text-xs text-[#555] mt-4">
-                                    N'utilisez le SOS qu'en cas de danger immédiat. Les fausses alertes peuvent entraîner la suspension du compte.
+                                    N&apos;utilisez le SOS qu&apos;en cas de danger immédiat. Les fausses alertes peuvent entraîner la suspension du compte.
                                 </p>
                             </div>
                         </motion.div>

@@ -136,7 +136,7 @@ export const RideRequestSheet = ({
                 ) : (
                     <div className="mb-8 px-1 py-4 text-center">
                         <span className="text-[#9A9A9A] text-sm">
-                            Entrez une destination pour voir l'estimation du prix
+                            Entrez une destination pour voir l&apos;estimation du prix
                         </span>
                     </div>
                 )}

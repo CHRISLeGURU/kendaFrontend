@@ -33,7 +33,7 @@ export const DriverTrustCard = ({
             <div className="flex items-center gap-4">
                 {/* Avatar Section */}
                 <div className="relative shrink-0">
-                    <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#1A1A1A]">
+                    <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-[#1A1A1A] relative">
                         <Image
                             src={driverImage}
                             alt={driverName}

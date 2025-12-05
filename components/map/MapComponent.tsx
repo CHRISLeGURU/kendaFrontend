@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, Polyline } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -188,7 +188,8 @@ const MapComponent = ({ onDestinationChange }: MapComponentProps) => {
         } else {
             setRoutePath([]);
         }
-    }, [position, destination, onDestinationChange]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [position, destination]);
 
     if (!position) {
         return (
