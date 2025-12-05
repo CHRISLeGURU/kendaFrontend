@@ -1,116 +1,128 @@
-# KENDA - Urban Mobility on Cardano Blockchain
+# 🚗 KENDA - Mobilité Urbaine Sécurisée sur Cardano
 
-A decentralized ride-sharing platform built on the Cardano blockchain, enabling secure, transparent, and rewarding urban mobility.
+![KENDA Banner](https://via.placeholder.com/1200x300/000000/F0B90B?text=KENDA+|+Safe+Urban+Mobility+on+Cardano)
 
-## 🚀 Features
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.0-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![Cardano](https://img.shields.io/badge/Cardano-Blockchain-0033AD?style=for-the-badge&logo=cardano)](https://cardano.org/)
 
-- **Blockchain Powered**: Built on Cardano for secure and transparent transactions
-- **Wallet Integration**: Connect with popular Cardano wallets (Nami, Eternl, Flint, Yoroi)
-- **Interactive Map**: Find and request rides in real-time
-- **Token Rewards**: Earn KENDA tokens for every ride
-- **Dark Mode**: Beautiful dark-themed UI optimized for mobile use
+## 📝 Introduction
 
-## 🛠️ Tech Stack
+**KENDA** est une Progressive Web App (PWA) révolutionnaire conçue pour résoudre les problèmes critiques de mobilité urbaine à Goma, RDC. Dans un contexte marqué par l'insécurité (enlèvements, vols) et l'informalité, KENDA apporte la confiance et la transparence grâce à une approche hybride Web2 + Web3.
 
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Styling**: TailwindCSS
-- **UI Components**: Custom components following KENDA design system
-- **Icons**: Lucide React
-- **Maps**: Leaflet
-- **Blockchain**: MeshJS (Cardano wallet integration)
-- **Fonts**: Inter & Manrope (Google Fonts)
+Notre mission : **Garantir que chaque trajet est sûr et que chaque interaction est équitable**, en utilisant l'identité décentralisée (DID) sur Cardano pour certifier les chauffeurs et automatiser la gestion des contraventions.
 
-## 🎨 Design System
+---
 
-### Color Palette
-- **Background**: `#000000` (Primary), `#0C0C0C` (Secondary)
-- **Borders**: `#1A1A1A`
-- **Accent**: `#F0B90B` (Kenda Yellow)
-- **Text**: `#FFFFFF` (Primary), `#9A9A9A` (Secondary)
-- **Error**: `#FF4747`
+## ✨ Fonctionnalités Clés
 
-### Typography
-- **Headings**: Manrope (Bold/Semi-Bold)
-- **Body**: Inter (Regular/Medium)
-- **Sizes**: H1 (32px), H2 (24px), Body (14-16px)
+### 🚕 Transport & Mobilité (Passager)
+-   **Commande VTC Intuitive :** Interface fluide pour commander un taxi ou une moto-taxi en quelques clics.
+-   **Carte Interactive :** Visualisation en temps réel des chauffeurs et du trajet (propulsé par `React-Leaflet` & `CartoDB Dark Matter`).
+-   **Estimation Transparente :** Calcul automatique du prix et du temps de trajet avant la commande.
 
-### Component Rules
-- **Buttons**: Yellow background, black text, 10-12px radius
-- **Cards**: Dark background (#0C0C0C), border (#1A1A1A), 12px radius, 24px padding
-- **Inputs**: Dark background, white text, yellow focus ring
-- **Spacing**: Multiples of 8px (8, 16, 24, 32)
+### 🛡️ Sécurité & Confiance (Web3)
+-   **Identité Certifiée (DID) :** Vérification immuable des chauffeurs via la blockchain Cardano.
+-   **Panic Button (SOS) :** Bouton d'urgence partageant la localisation temps réel et les détails du chauffeur aux proches et autorités.
+-   **"Trust Score" :** Système de réputation infalsifiable basé sur l'historique des trajets.
 
-## 📦 Installation
+### 👮 Autorité & Régulation (Police)
+-   **Contraventions Numériques :** Module pour la Police de Roulage permettant d'émettre des amendes infalsifiables liées au Wallet du chauffeur.
+-   **Transparence des paiements :** Réduction de la corruption grâce à la traçabilité des fonds publics.
+
+### 💳 Finance Décentralisée
+-   **Paiements Hybrides :** Support du Mobile Money local et des crypto-monnaies (ADA/Tokens).
+-   **Integration Wallet :** Connexion transparente via `MeshJS` pour la gestion des actifs.
+
+---
+
+## 🛠️ Stack Technique
+
+Ce projet a été construit avec les technologies les plus modernes pour assurer performance, accessibilité et sécurité.
+
+-   **Frontend :** [Next.js 14](https://nextjs.org/) (App Router) - Framework React de production.
+-   **Langage :** [TypeScript](https://www.typescriptlang.org/) - Typage statique pour un code robuste.
+-   **Design System :**
+    -   [TailwindCSS](https://tailwindcss.com/) - Styling utilitaire performant.
+    -   [Shadcn/UI](https://ui.shadcn.com/) - Composants accessibles et personnalisables.
+    -   [Lucide React](https://lucide.dev/) - Icônes vectorielles légères.
+-   **Cartographie :** [React-Leaflet](https://react-leaflet.js.org/) & Tiles OpenStreetMap/CartoDB.
+-   **Blockchain :** [MeshJS](https://meshjs.dev/) - SDK complet pour l'interaction avec Cardano.
+
+---
+
+## 🚀 Installation & Démarrage
+
+Suivez ces instructions pour lancer le projet en local pour le développement ou la démonstration.
+
+### Prérequis
+-   Node.js 18+ installé.
+-   Un gestionnaire de paquets (npm, yarn ou pnpm).
+
+### Commandes
 
 ```bash
-# Install dependencies
+# 1. Cloner le dépôt
+git clone https://github.com/TITAN-CARADANO-TEAM/kendaFrontend.git
+
+# 2. Accéder au dossier
+cd kendaFrontend
+
+# 3. Installer les dépendances
 npm install
 
-# Run development server
+# 4. Configurer les variables d'environnement
+# Copiez le fichier d'exemple et remplissez les valeurs nécessaires (API Keys, etc.)
+cp .env.example .env.local
+
+# 5. Lancer le serveur de développement
 npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
 ```
 
-## 🌐 Development
+Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur pour voir l'application.
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+---
 
-### Project Structure
+## 📂 Structure du Projet
 
+Voici un aperçu de l'organisation du code source :
+
+```ascii
+src/
+├── app/                  # Routes Next.js (App Router)
+│   ├── layout.tsx        # Layout global (Sidebar, Fontes)
+│   ├── page.tsx          # Page d'accueil (Landing)
+│   ├── map/              # Vue principale (Carte)
+│   ├── auth/             # Login/Inscription
+│   └── wallet/           # Interface Portefeuille
+├── components/           # Composants Réutilisables
+│   ├── ui/               # Primitives UI (Boutons, Cards...)
+│   ├── map/              # Composants Cartographiques (Leaflet)
+│   ├── ride/             # Logique de trajet (Request, Rating, SOS)
+│   ├── layout/           # Sidebar, Navbar, Header
+│   └── auth/             # Formulaires d'authentification
+├── lib/                  # Utilitaires & Hooks
+└── public/               # Assets statiques (Images, Icons)
 ```
-kendaFrontend/
-├── app/                    # Next.js App Router pages
-│   ├── layout.tsx         # Root layout with fonts
-│   ├── page.tsx           # Landing page
-│   ├── map/               # Map view page
-│   └── wallet/            # Wallet page
-├── components/
-│   ├── ui/                # Reusable UI components
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   └── input.tsx
-│   └── layout/            # Layout components
-│       ├── header.tsx
-│       └── footer.tsx
-├── lib/
-│   └── utils.ts           # Utility functions
-└── public/                # Static assets
-```
 
-## 🔗 Blockchain Integration
+---
 
-KENDA uses MeshJS to integrate with the Cardano blockchain:
+## 👥 L'Équipe Titan
 
-- Connect Cardano wallets (Nami, Eternl, Flint, Yoroi)
-- View ADA and KENDA token balances
-- Transaction history
-- Secure on-chain ride records
+Une équipe passionnée dédiée à l'innovation technologique en Afrique.
 
-## 📱 Mobile First
+| Rôle | Membre | Responsabilités |
+| :--- | :--- | :--- |
+| **Team Lead Frontend** | **Peter** | Architecture Globale, Map Integration, Core Logic. |
+| **Ride Logic** | **Kévin & Anderson** | Algorithmes de matching, Flux VTC, États de course. |
+| **UI & Profil** | **Dieu** | Design System, Expérience Utilisateur, Dashboard. |
+| **Module Police** | **Dek & Chris** | Logique de contraventions, Interface Autorité. |
+| **Documentation** | **Joël** | Rédaction technique, Présentation, Pitch. |
 
-The application is designed with a mobile-first approach, optimized for users on the move.
+---
 
-## 🤝 Contributing
-
-Contributions are welcome! Please follow the KENDA design system guidelines when creating new components.
-
-## 📄 License
-
-© 2024 KENDA. Built on Cardano. All rights reserved.
-
-## 🔮 Roadmap
-
-- [ ] Complete Leaflet map integration
-- [ ] Implement MeshJS wallet connection
-- [ ] Add real-time ride matching
-- [ ] Integrate KENDA token smart contracts
-- [ ] Build driver dashboard
-- [ ] Add ride history and analytics
-- [ ] Implement rating system
-- [ ] Mobile app (React Native)
+<div align="center">
+  <p>Développé avec ❤️ à Goma pour le Hackathon <strong>ADA PRISMA</strong>.</p>
+  <p>© 2025 KENDA Project.</p>
+</div>
