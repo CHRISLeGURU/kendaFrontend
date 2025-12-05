@@ -178,9 +178,9 @@ export function LandingPage() {
                             <p className="text-sm text-[#666] mt-2">Développé pour le Hackathon Ada Prisma</p>
                         </div>
                         <div className="flex gap-8 text-sm text-[#9A9A9A]">
-                            <Link href="#" className="hover:text-white transition-colors">À propos</Link>
-                            <Link href="#" className="hover:text-white transition-colors">Confidentialité</Link>
-                            <Link href="#" className="hover:text-white transition-colors">Contact</Link>
+                            <Link href="#" className="hover:text-white transition-colors" onClick={() => alert("Fonctionnalité à venir")}>À propos</Link>
+                            <Link href="#" className="hover:text-white transition-colors" onClick={() => alert("Fonctionnalité à venir")}>Confidentialité</Link>
+                            <Link href="#" className="hover:text-white transition-colors" onClick={() => alert("Fonctionnalité à venir")}>Contact</Link>
                         </div>
                         <p className="text-sm text-[#666]">
                             © 2025 KENDA Inc.

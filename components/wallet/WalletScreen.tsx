@@ -93,6 +93,7 @@ export function WalletScreen() {
                             <div className="grid grid-cols-2 gap-4">
                                 <Button
                                     className="h-14 bg-[#F0B90B] text-black hover:bg-[#F0B90B]/90 border-0 font-bold text-base rounded-xl shadow-lg shadow-[#F0B90B]/10"
+                                    onClick={() => alert("Fonctionnalité à venir")}
                                 >
                                     <Plus className="w-5 h-5 mr-2" />
                                     Recharger
@@ -100,6 +101,7 @@ export function WalletScreen() {
                                 <Button
                                     variant="secondary"
                                     className="h-14 bg-[#1A1A1A] text-white hover:bg-[#252525] border border-[#333] font-medium text-base rounded-xl"
+                                    onClick={() => alert("Fonctionnalité à venir")}
                                 >
                                     <List className="w-5 h-5 mr-2 text-[#9A9A9A]" />
                                     Historique
