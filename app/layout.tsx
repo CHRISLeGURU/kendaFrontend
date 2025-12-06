@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     },
 
     // Canonical URL
-    metadataBase: new URL("https://kenda.app"),
+    metadataBase: new URL("https://kenda-appp.vercel.app"),
     alternates: {
         canonical: "/",
         languages: {
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     openGraph: {
         type: "website",
         locale: "fr_CD",
-        url: "https://kenda.app",
+        url: "https://kenda-appp.vercel.app",
         siteName: "KENDA",
         title: "KENDA - VTC & Taxi Sécurisé à Goma | La Première App de Mobilité Blockchain",
         description: "Réservez un taxi ou moto-taxi sécurisé à Goma en 2 clics. Chauffeurs vérifiés, paiement Mobile Money & Crypto, suivi GPS en temps réel. 100% Sûr.",
@@ -114,7 +114,7 @@ export const metadata: Metadata = {
             app_name: "KENDA",
         },
         web: {
-            url: "https://kenda.app",
+            url: "https://kenda-appp.vercel.app/",
             should_fallback: true,
         },
     },
@@ -153,8 +153,8 @@ export default function RootLayout({
                             "@type": "Organization",
                             "name": "KENDA",
                             "alternateName": "KENDA Taxi",
-                            "url": "https://kenda.app",
-                            "logo": "https://kenda.app/logo.png",
+                            "url": "https://kenda-appp.vercel.app",
+                            "logo": "https://kenda-appp.vercel.app/logo.png",
                             "description": "Plateforme de VTC et taxi sécurisé par blockchain Cardano à Goma, RDC",
                             "foundingDate": "2024",
                             "founders": [
@@ -217,8 +217,8 @@ export default function RootLayout({
                             "@context": "https://schema.org",
                             "@type": "LocalBusiness",
                             "name": "KENDA Taxi Goma",
-                            "@id": "https://kenda.app",
-                            "url": "https://kenda.app",
+                            "@id": "https://kenda-appp.vercel.app",
+                            "url": "https://kenda-appp.vercel.app",
                             "telephone": "+243-XXX-XXX-XXX",
                             "priceRange": "$$",
                             "address": {

@@ -1,5 +1,5 @@
 # Sitemap for KENDA - VTC & Taxi Application
-# https://kenda.app
+# https://kenda-appp.vercel.app
 
 User-agent: *
 Allow: /
@@ -18,7 +18,7 @@ Allow: /contact
 Allow: /driver
 
 # Sitemap location
-Sitemap: https://kenda.app/sitemap.xml
+Sitemap: https://kenda-appp.vercel.app/sitemap.xml
 
 # Crawl delay for polite crawling
 Crawl-delay: 1

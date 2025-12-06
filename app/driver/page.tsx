@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "Devenir Chauffeur KENDA - Gagnez jusqu'à 500.000 FC/mois 💰",
         description: "Inscription gratuite, revenus attractifs, vous êtes votre propre patron. Rejoignez la révolution du transport à Goma !",
-        url: "https://kenda.app/driver",
+        url: "https://kenda-appp.vercel.app/driver",
         type: "website",
         images: [
             {
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
         ],
     },
     alternates: {
-        canonical: "https://kenda.app/driver",
+        canonical: "https://kenda-appp.vercel.app/driver",
     },
 };
 

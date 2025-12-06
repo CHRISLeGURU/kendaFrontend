@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: "KENDA - Taxi & VTC Sécurisé à Goma 🚖",
         description: "Commander un taxi sécurisé à Goma en 2 clics. Chauffeurs vérifiés, paiement Mobile Money, 100% fiable.",
-        url: "https://kenda.app",
+        url: "https://kenda-appp.vercel.app",
         type: "website",
         images: [
             {
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
         images: ["/twitter-home.png"],
     },
     alternates: {
-        canonical: "https://kenda.app",
+        canonical: "https://kenda-appp.vercel.app",
     },
 };
 
