@@ -1,0 +1,39 @@
+# Sitemap for KENDA - VTC & Taxi Application
+# https://kenda.app
+
+User-agent: *
+Allow: /
+
+# Block admin and private routes
+Disallow: /api/
+Disallow: /driver-application
+Disallow: /driver-pending
+Disallow: /driver-dashboard
+
+# Allow important pages for indexing
+Allow: /
+Allow: /login
+Allow: /about
+Allow: /contact
+Allow: /driver
+
+# Sitemap location
+Sitemap: https://kenda.app/sitemap.xml
+
+# Crawl delay for polite crawling
+Crawl-delay: 1
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+
+# Bing specific  
+User-agent: Bingbot
+Allow: /
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /

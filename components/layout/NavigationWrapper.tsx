@@ -36,7 +36,7 @@ export function NavigationWrapper({ children }: NavigationWrapperProps) {
     return (
         <>
             <DesktopSidebar />
-            <div className="flex-1 h-full w-full md:pl-64 transition-all duration-300 relative">
+            <div className="flex-1 h-full w-full md:pl-64 transition-all duration-300 relative overflow-y-auto">
                 {children}
             </div>
             <MobileNavBar />
