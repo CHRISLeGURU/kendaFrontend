@@ -1,14 +1,28 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { List, Plus, CreditCard, Send, QrCode, ArrowUpRight, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
-import { CardanoWalletConnect } from "@/components/wallet/CardanoWalletConnect";
 import { motion } from "framer-motion";
 import { PaymentModal } from "./PaymentModal";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useState, useEffect } from "react";
+
+// Dynamic import with SSR disabled - required because @meshsdk uses WASM modules
+const CardanoWalletConnect = dynamic(
+    () => import("@/components/wallet/CardanoWalletConnect").then(mod => mod.CardanoWalletConnect),
+    {
+        ssr: false,
+        loading: () => (
+            <div className="flex flex-col gap-4 p-5 rounded-2xl bg-[#0A0A0A] border border-[#1F1F1F] w-full shadow-xl animate-pulse">
+                <div className="h-8 bg-[#1A1A1A] rounded w-3/4"></div>
+                <div className="h-24 bg-[#1A1A1A] rounded"></div>
+            </div>
+        )
+    }
+);
 import { X, Camera } from "lucide-react";
 
 export function WalletScreen() {

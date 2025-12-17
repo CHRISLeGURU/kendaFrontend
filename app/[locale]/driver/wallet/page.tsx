@@ -1,13 +1,27 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { useAuth } from "@/hooks/useAuth";
 import { createClient } from "@/lib/supabase/client";
 import { Wallet, ArrowDownRight, ArrowUpRight, CreditCard, TrendingUp, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { CardanoWalletConnect } from "@/components/wallet/CardanoWalletConnect";
+
+// Dynamic import with SSR disabled - required because @meshsdk uses WASM modules
+const CardanoWalletConnect = dynamic(
+    () => import("@/components/wallet/CardanoWalletConnect").then(mod => mod.CardanoWalletConnect),
+    {
+        ssr: false,
+        loading: () => (
+            <div className="flex flex-col gap-4 p-5 rounded-2xl bg-[#0A0A0A] border border-[#1F1F1F] w-full shadow-xl animate-pulse">
+                <div className="h-8 bg-[#1A1A1A] rounded w-3/4"></div>
+                <div className="h-24 bg-[#1A1A1A] rounded"></div>
+            </div>
+        )
+    }
+);
 
 interface Transaction {
     id: string;
