@@ -92,6 +92,7 @@ export function DriverDashboard({
     const [isMounted, setIsMounted] = useState(false);
     const [isOnline, setIsOnline] = useState(false);
     const [myLocation, setMyLocation] = useState<[number, number] | null>(null);
+    const [exchangeRate, setExchangeRate] = useState<number | null>(null);
 
     // Data Lists
     const [availableRides, setAvailableRides] = useState<any[]>([]); // Rides with status 'SEARCHING'
@@ -113,6 +114,15 @@ export function DriverDashboard({
         setIsMounted(true);
         // Default location (Goma) if GPS fails initially
         setMyLocation([-1.6585, 29.2205]);
+
+        // Fetch exchange rate
+        const fetchRate = async () => {
+            const { data } = await import('@/services/walletService').then(m => m.getExchangeRate());
+            if (data) {
+                setExchangeRate(data.ada_to_fc);
+            }
+        };
+        fetchRate();
     }, []);
 
     useEffect(() => { isOnlineRef.current = isOnline; }, [isOnline]);
@@ -481,6 +491,11 @@ export function DriverDashboard({
                                 </h3>
                                 <div className="flex items-center gap-2">
                                     <h2 className="text-2xl font-bold text-white">{(selectedRide.price || 0).toLocaleString()} FC</h2>
+                                    {exchangeRate && (
+                                        <span className="text-sm text-[#F0B90B] font-medium">
+                                            (~{((selectedRide.price || 0) / exchangeRate).toFixed(2)} ₳)
+                                        </span>
+                                    )}
                                     <span className="px-2 py-0.5 bg-neutral-800 rounded text-xs text-neutral-400">Cash</span>
                                 </div>
                             </div>

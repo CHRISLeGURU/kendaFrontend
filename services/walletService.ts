@@ -186,14 +186,10 @@ export async function withdraw(
  * Obtient le taux de change ADA/FC
  */
 export async function getExchangeRate(): Promise<ApiResponse<{ ada_to_fc: number }>> {
-    // TODO: Connect to price oracle API
-    // This could be CoinGecko, Blockfrost, or a custom oracle
-
-    console.warn('[walletService] getExchangeRate: Not connected to backend');
-
-    // Return a default rate for now
+    // Taux fixe pour le développement
+    // 1 ADA = 1500 FC
     return {
-        data: { ada_to_fc: 2500 }, // 1 ADA ≈ 2500 FC
+        data: { ada_to_fc: 1500 },
         error: null,
         success: true
     };

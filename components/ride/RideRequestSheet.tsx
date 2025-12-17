@@ -32,6 +32,18 @@ export const RideRequestSheet = ({
     const t = useTranslations('Ride');
     const [estimatedPrice, setEstimatedPrice] = useState<number | null>(null);
     const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
+    const [exchangeRate, setExchangeRate] = useState<number | null>(null);
+
+    // Fetch exchange rate on mount
+    useEffect(() => {
+        const fetchRate = async () => {
+            const { data } = await import('@/services/walletService').then(m => m.getExchangeRate());
+            if (data) {
+                setExchangeRate(data.ada_to_fc);
+            }
+        };
+        fetchRate();
+    }, []);
 
     // Calculate price based on distance from map
     useEffect(() => {
@@ -155,9 +167,16 @@ export const RideRequestSheet = ({
                     <div className="flex items-center justify-between mb-8 px-1">
                         <div className="flex flex-col">
                             <span className="text-[#9A9A9A] text-sm font-medium mb-1">{t('estimatedPrice')}</span>
-                            <span className="text-3xl font-bold text-white font-heading">
-                                {estimatedPrice.toLocaleString()} FC
-                            </span>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-3xl font-bold text-white font-heading">
+                                    {estimatedPrice.toLocaleString()} FC
+                                </span>
+                                {exchangeRate && (
+                                    <span className="text-sm text-[#F0B90B] font-medium">
+                                        (~{(estimatedPrice / exchangeRate).toFixed(2)} ₳)
+                                    </span>
+                                )}
+                            </div>
                         </div>
 
                         <div className="flex items-center gap-3 bg-[#1A1A1A] px-4 py-2 rounded-lg border border-[#2A2A2A]">
