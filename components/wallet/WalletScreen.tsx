@@ -113,7 +113,7 @@ export function WalletScreen() {
                             <div className="w-12 h-12 bg-[#1A1A1A] rounded-full flex items-center justify-center mx-auto mb-3">
                                 <History className="w-5 h-5 text-[#666]" />
                             </div>
-                            <p className="text-white font-medium mb-1">C'est calme ici...</p>
+                            <p className="text-white font-medium mb-1">C&apos;est calme ici...</p>
                             <p className="text-[#666] text-xs leading-relaxed max-w-[200px] mx-auto">
                                 Vos futures transactions apparaîtront ici une fois que vous aurez commencé à utiliser votre wallet.
                             </p>
