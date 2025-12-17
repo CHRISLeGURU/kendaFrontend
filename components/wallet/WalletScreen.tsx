@@ -1,195 +1,213 @@
 "use client";
 
-import React, { useState } from "react";
-import { Wallet, Plus, List, Copy, ExternalLink, RefreshCw, CreditCard } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { ArrowRight, Wallet, Smartphone, AlertCircle, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
 
+// Types pour les opérateurs
+type Operator = 'AIRTEL' | 'ORANGE' | 'MPESA';
+
+const OPERATORS: { id: Operator; name: string; color: string; logo: string }[] = [
+    { id: 'AIRTEL', name: 'Airtel Money', color: '#E60000', logo: 'A' },
+    { id: 'ORANGE', name: 'Orange Money', color: '#FF7900', logo: 'O' },
+    { id: 'MPESA', name: 'M-Pesa', color: '#E60000', logo: 'M' }, // Vodacom Red
+];
+
 export function WalletScreen() {
-    const t = useTranslations('Wallet');
-    const tCommon = useTranslations('Common');
-    // Mock state for connection (toggleable for demo)
-    const [isConnected, setIsConnected] = useState(false);
-    const [balance, setBalance] = useState("450.00");
-    const [address, setAddress] = useState("addr1...zx9");
+    const t = useTranslations('Wallet'); // On garde les clés existantes ou on en crée de nouvelles si besoin
+
+    // États du formulaire
+    const [selectedOperator, setSelectedOperator] = useState<Operator | null>(null);
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [amountFC, setAmountFC] = useState("");
+    const [walletAddress, setWalletAddress] = useState("");
+    const [exchangeRate, setExchangeRate] = useState<number>(1500); // Default fallback
+
+    // Calcul de la conversion
+    const estimatedADA = amountFC ? (parseInt(amountFC) / exchangeRate).toFixed(2) : "0.00";
+
+    // Fetch exchange rate on mount
+    useEffect(() => {
+        const fetchRate = async () => {
+            const { data } = await import('@/services/walletService').then(m => m.getExchangeRate());
+            if (data) {
+                setExchangeRate(data.ada_to_fc);
+            }
+        };
+        fetchRate();
+    }, []);
 
     return (
-        <div className="h-full overflow-y-auto bg-black text-white pb-24 pt-safe">
+        <div className="h-full overflow-y-auto bg-black text-white pb-24 pt-safe relative">
+
+            {/* Background Gradients */}
+            <div className="fixed inset-0 pointer-events-none">
+                <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-[#F0B90B]/10 to-transparent opacity-50" />
+                <div className="absolute bottom-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[100px]" />
+            </div>
+
             {/* Header */}
-            <header className="sticky top-0 z-10 bg-black/80 backdrop-blur-md -mx-4 px-4 py-4 mb-6 border-b border-[#1A1A1A]">
-                <h1 className="text-xl font-heading font-bold text-white text-center">
-                    {t('title')}
-                </h1>
+            <header className="sticky top-0 z-10 bg-black/80 backdrop-blur-md px-6 py-6 border-b border-[#1A1A1A]">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-heading font-bold text-white">
+                            Recharger ADA
+                        </h1>
+                        <p className="text-sm text-[#9A9A9A]">Via Mobile Money</p>
+                    </div>
+                    <div className="px-3 py-1 bg-[#F0B90B]/10 border border-[#F0B90B]/30 rounded-full">
+                        <span className="text-xs font-bold text-[#F0B90B] flex items-center gap-1">
+                            <span className="w-2 h-2 rounded-full bg-[#F0B90B] animate-pulse" />
+                            COMING SOON
+                        </span>
+                    </div>
+                </div>
             </header>
 
-            <div className="px-4 space-y-8">
-                {/* Connection Toggle (For Demo Purposes) */}
-                <div className="flex justify-center opacity-50 hover:opacity-100 transition-opacity">
-                    <button
-                        onClick={() => setIsConnected(!isConnected)}
-                        className="text-xs text-[#9A9A9A] underline"
-                    >
-                        [DEV: Toggle Connection State]
-                    </button>
-                </div>
+            <div className="px-6 py-8 space-y-8 relative z-0">
 
-                <AnimatePresence mode="wait">
-                    {isConnected ? (
-                        <motion.div
-                            key="connected"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            className="space-y-8"
-                        >
-                            {/* Cardano Card */}
-                            <div className="relative w-full aspect-[1.586] bg-gradient-to-br from-[#1A1A1A] to-black rounded-2xl border border-[#F0B90B]/50 p-6 flex flex-col justify-between overflow-hidden shadow-2xl shadow-[#F0B90B]/10">
-                                {/* Background Pattern/Watermark */}
-                                <div className="absolute -right-10 -top-10 opacity-5 pointer-events-none">
-                                    <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor" className="text-white">
-                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                                    </svg>
-                                </div>
-
-                                {/* Top Row */}
-                                <div className="flex justify-between items-start z-10">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-8 h-8 rounded-full bg-[#F0B90B]/20 flex items-center justify-center">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                                            </svg>
-                                        </div>
-                                        <span className="font-bold text-white tracking-wider">CARDANO</span>
-                                    </div>
-                                    <span className="text-[#F0B90B] font-mono text-xs bg-[#F0B90B]/10 px-2 py-1 rounded">
-                                        MAINNET
-                                    </span>
-                                </div>
-
-                                {/* Balance */}
-                                <div className="z-10">
-                                    <p className="text-[#9A9A9A] text-xs font-medium mb-1 uppercase tracking-wider">{t('availableBalance')}</p>
-                                    <div className="flex items-baseline gap-2">
-                                        <h2 className="text-4xl font-heading font-bold text-white tracking-tight">
-                                            {balance}
-                                        </h2>
-                                        <span className="text-xl font-medium text-[#F0B90B]">ADA</span>
-                                    </div>
-                                    <p className="text-[#9A9A9A] text-sm mt-1">≈ $180.00 USD</p>
-                                </div>
-
-                                {/* Address */}
-                                <div className="flex items-center justify-between z-10">
-                                    <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-lg border border-white/5 backdrop-blur-sm">
-                                        <span className="font-mono text-xs text-[#9A9A9A]">{address}</span>
-                                        <Copy className="w-3 h-3 text-[#F0B90B] cursor-pointer hover:text-white" />
-                                    </div>
-                                    <div className="w-8 h-5 rounded bg-[#F0B90B]/20 flex items-center justify-center border border-[#F0B90B]/30">
-                                        <div className="w-4 h-4 rounded-full bg-[#F0B90B]" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Quick Actions */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <Button
-                                    className="h-14 bg-[#F0B90B] text-black hover:bg-[#F0B90B]/90 border-0 font-bold text-base rounded-xl shadow-lg shadow-[#F0B90B]/10"
-                                    onClick={() => alert("Fonctionnalité à venir")}
-                                >
-                                    <Plus className="w-5 h-5 mr-2" />
-                                    {t('recharge')}
-                                </Button>
-                                <Button
-                                    variant="secondary"
-                                    className="h-14 bg-[#1A1A1A] text-white hover:bg-[#252525] border border-[#333] font-medium text-base rounded-xl"
-                                    onClick={() => alert("Fonctionnalité à venir")}
-                                >
-                                    <List className="w-5 h-5 mr-2 text-[#9A9A9A]" />
-                                    {t('history')}
-                                </Button>
-                            </div>
-
-                            {/* Recent Transactions Preview */}
-                            <div>
-                                <h3 className="text-lg font-bold text-white mb-4">{t('recentTransactions')}</h3>
-                                <div className="space-y-3">
-                                    <TransactionItem
-                                        type="credit"
-                                        label={t('mockTx1')}
-                                        date={`${tCommon('today')}, 10:23`}
-                                        amount="+ 50 ADA"
-                                    />
-                                    <TransactionItem
-                                        type="debit"
-                                        label={t('mockTx2')}
-                                        date={`${tCommon('yesterday')}, 18:45`}
-                                        amount="- 12 ADA"
-                                    />
-                                </div>
-                            </div>
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key="disconnected"
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="flex flex-col items-center justify-center py-12 px-4 text-center"
-                        >
-                            <div className="w-24 h-24 bg-[#1A1A1A] rounded-full flex items-center justify-center mb-8 border-2 border-[#1A1A1A] shadow-2xl">
-                                <Wallet className="w-10 h-10 text-[#F0B90B]" />
-                            </div>
-
-                            <h2 className="text-2xl font-heading font-bold text-white mb-3">
-                                {t('connectTitle')}
-                            </h2>
-                            <p className="text-[#9A9A9A] mb-8 max-w-xs mx-auto leading-relaxed">
-                                {t('connectDesc')}
-                            </p>
-
-                            <Button
-                                onClick={() => setIsConnected(true)}
-                                className="w-full max-w-xs h-14 bg-[#F0B90B] text-black font-bold text-lg rounded-xl shadow-lg hover:bg-[#F0B90B]/90"
+                {/* 1. Opérateur */}
+                <section>
+                    <h2 className="text-sm font-bold text-[#9A9A9A] uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center text-xs border border-[#333]">1</span>
+                        Choisissez votre opérateur
+                    </h2>
+                    <div className="grid grid-cols-3 gap-3">
+                        {OPERATORS.map((op) => (
+                            <button
+                                key={op.id}
+                                onClick={() => setSelectedOperator(op.id)}
+                                className={cn(
+                                    "relative h-20 rounded-xl border-2 flex flex-col items-center justify-center gap-1.5 transition-all duration-200",
+                                    selectedOperator === op.id
+                                        ? "bg-[#1A1A1A] border-white shadow-xl scale-105"
+                                        : "bg-[#0C0C0C] border-[#1A1A1A] hover:border-[#333] opacity-70 hover:opacity-100"
+                                )}
                             >
-                                {t('connectBtn')}
-                            </Button>
+                                <div
+                                    className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-white text-sm shadow-lg"
+                                    style={{ backgroundColor: op.color }}
+                                >
+                                    {op.logo}
+                                </div>
+                                <span className="text-[10px] font-medium text-white">{op.name}</span>
 
-                            <p className="mt-6 text-xs text-[#555]">
-                                {t('supportedWallets')}
-                            </p>
+                                {selectedOperator === op.id && (
+                                    <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-lg">
+                                        <div className="w-2 h-2 bg-black rounded-full" />
+                                    </div>
+                                )}
+                            </button>
+                        ))}
+                    </div>
+                </section>
+
+                {/* 2. Montant & Numéro */}
+                <section className="space-y-4">
+                    <h2 className="text-sm font-bold text-[#9A9A9A] uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center text-xs border border-[#333]">2</span>
+                        Détails du paiement
+                    </h2>
+
+                    <div className="space-y-4">
+                        {/* Numéro de téléphone */}
+                        <div className="relative">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9A9A9A]">
+                                <Smartphone className="w-5 h-5" />
+                            </div>
+                            <Input
+                                type="tel"
+                                placeholder="Numéro Mobile Money (ex: +243...)"
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                className="h-14 pl-12 bg-[#151515] border-[#2A2A2A] text-white rounded-xl focus:ring-[#F0B90B] focus:border-[#F0B90B] text-lg"
+                            />
+                        </div>
+
+                        {/* Montant FC */}
+                        <div className="relative">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9A9A9A] font-bold text-sm">
+                                FC
+                            </div>
+                            <Input
+                                type="number"
+                                placeholder="Montant en Francs Congolais"
+                                value={amountFC}
+                                onChange={(e) => setAmountFC(e.target.value)}
+                                className="h-14 pl-12 bg-[#151515] border-[#2A2A2A] text-white rounded-xl focus:ring-[#F0B90B] focus:border-[#F0B90B] text-lg font-mono"
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Conversion Card */}
+                <AnimatePresence>
+                    {amountFC && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            className="bg-gradient-to-r from-[#1A1A1A] to-[#0C0C0C] p-4 rounded-xl border border-[#F0B90B]/30 flex items-center justify-between"
+                        >
+                            <div className="flex flex-col">
+                                <span className="text-xs text-[#9A9A9A] mb-1">Vous recevrez environ</span>
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-2xl font-bold text-[#F0B90B] font-mono">{estimatedADA}</span>
+                                    <span className="text-sm font-bold text-white">ADA</span>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <span className="text-[10px] text-[#555] block">Taux actuel</span>
+                                <span className="text-xs text-[#777]">1 ADA ≈ {exchangeRate} FC</span>
+                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
-            </div>
-        </div>
-    );
-}
 
-function TransactionItem({ type, label, date, amount }: { type: 'credit' | 'debit', label: string, date: string, amount: string }) {
-    const isCredit = type === 'credit';
+                {/* 3. Wallet Reception */}
+                <section>
+                    <h2 className="text-sm font-bold text-[#9A9A9A] uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-full bg-[#1A1A1A] text-white flex items-center justify-center text-xs border border-[#333]">3</span>
+                        Adresse de réception
+                    </h2>
+                    <div className="relative">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9A9A9A]">
+                            <Wallet className="w-5 h-5" />
+                        </div>
+                        <Input
+                            placeholder="Votre adresse Cardano (addr1...)"
+                            value={walletAddress}
+                            onChange={(e) => setWalletAddress(e.target.value)}
+                            className="h-14 pl-12 bg-[#151515] border-[#2A2A2A] text-white rounded-xl focus:ring-[#F0B90B] focus:border-[#F0B90B] font-mono text-xs"
+                        />
+                    </div>
+                    <p className="text-[10px] text-[#555] mt-2 ml-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        Assurez-vous que l'adresse est correcte. Les transactions crypto sont irréversibles.
+                    </p>
+                </section>
 
-    return (
-        <div className="flex items-center justify-between p-4 bg-[#0C0C0C] rounded-xl border border-[#1A1A1A]">
-            <div className="flex items-center gap-3">
-                <div className={cn(
-                    "w-10 h-10 rounded-full flex items-center justify-center",
-                    isCredit ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500"
-                )}>
-                    {isCredit ? <Plus className="w-5 h-5" /> : <CreditCard className="w-5 h-5" />}
+                {/* Action Button */}
+                <div className="pt-4">
+                    <Button
+                        disabled={true} // Toujours désactivé pour "Coming Soon"
+                        className="w-full h-16 bg-[#F0B90B] text-black font-bold text-lg rounded-xl shadow-lg shadow-[#F0B90B]/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <span className="flex items-center gap-2">
+                            ACHETER ADA
+                            <ArrowRight className="w-5 h-5" />
+                        </span>
+                    </Button>
+                    <p className="text-center text-xs text-[#555] mt-4">
+                        Service bientôt disponible à Goma.
+                    </p>
                 </div>
-                <div className="text-left">
-                    <p className="font-bold text-white text-sm">{label}</p>
-                    <p className="text-xs text-[#9A9A9A]">{date}</p>
-                </div>
+
             </div>
-            <span className={cn(
-                "font-mono font-bold",
-                isCredit ? "text-green-500" : "text-white"
-            )}>
-                {amount}
-            </span>
         </div>
     );
 }
