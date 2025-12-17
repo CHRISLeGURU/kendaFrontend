@@ -1,7 +1,7 @@
 "use client";
 
 import { Link, usePathname } from "@/lib/navigation";
-import { Home, Clock, Wallet, User, LogOut, Shield, Loader2 } from "lucide-react";
+import { Home, Clock, Wallet, User, LogOut, Shield, Loader2, Droplets } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
@@ -33,7 +33,7 @@ export function DesktopSidebar() {
         {
             label: t('wallet'),
             href: "/wallet",
-            icon: Wallet,
+            icon: Droplets,
         },
         {
             label: t('account'),

@@ -1,7 +1,7 @@
 "use client";
 
 import { Link, usePathname } from "@/lib/navigation";
-import { Home, Clock, Wallet, User } from "lucide-react";
+import { Home, Clock, Wallet, User, Droplets } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
@@ -28,7 +28,7 @@ export function MobileNavBar() {
         {
             label: t('wallet'),
             href: "/wallet",
-            icon: Wallet,
+            icon: Droplets,
         },
         {
             label: t('account'),
