@@ -10,13 +10,16 @@ interface RideOfferProps {
     ride: any; // Utiliser 'any' temporairement si le type Ride pose problème, sinon Ride
     onAccept: () => void;
     onDecline: () => void;
+    autoDecline?: boolean;
 }
 
-export default function RideOfferScreen({ ride, onAccept, onDecline }: RideOfferProps) {
+export default function RideOfferScreen({ ride, onAccept, onDecline, autoDecline = true }: RideOfferProps) {
     const [progress, setProgress] = useState(100);
 
     // Countdown timer (e.g. 15 seconds)
     useEffect(() => {
+        if (!autoDecline) return;
+
         const duration = 15000; // 15s
         const step = 100;
         const interval = setInterval(() => {
@@ -32,7 +35,7 @@ export default function RideOfferScreen({ ride, onAccept, onDecline }: RideOffer
         }, step);
 
         return () => clearInterval(interval);
-    }, [onDecline]);
+    }, [onDecline, autoDecline]);
 
     return (
         <AnimatePresence>

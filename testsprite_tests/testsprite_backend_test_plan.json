@@ -1,0 +1,7 @@
+[
+  {
+    "id": "TC001",
+    "title": "post api chat generate chat reply via gemini",
+    "description": "Test the POST /api/chat endpoint to verify it correctly processes user messages and returns a valid chat response from the Google Gemini API. Validate handling of valid message arrays, response content structure, and error responses for invalid input or server errors."
+  }
+]

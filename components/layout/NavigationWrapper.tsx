@@ -3,6 +3,12 @@
 import { usePathname } from "next/navigation";
 import { MobileNavBar } from "@/components/layout/MobileNavBar";
 import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
+import dynamic from 'next/dynamic';
+
+const MeshProvider = dynamic(() => import("@meshsdk/react").then(mod => mod.MeshProvider), {
+    ssr: false,
+    loading: () => <div className="h-full w-full bg-black flex items-center justify-center text-white">Chargement Blockchain...</div>,
+});
 
 // Routes where navigation should be hidden completely
 const HIDDEN_NAV_ROUTES = [
@@ -50,33 +56,41 @@ export function NavigationWrapper({ children }: NavigationWrapperProps) {
         currentPath.startsWith(route)
     );
 
-    // If navigation should be hidden, render children without nav
-    if (shouldHideNav) {
-        return (
-            <div className="h-full w-full overflow-y-auto">
-                {children}
-            </div>
-        );
-    }
+    const renderContent = () => {
+        // If navigation should be hidden, render children without nav
+        if (shouldHideNav) {
+            return (
+                <div className="h-full w-full overflow-y-auto">
+                    {children}
+                </div>
+            );
+        }
 
-    // If it's a driver route, the driver layout handles its own navigation
-    // So we just render children without passenger navigation
-    if (isDriverRoute) {
-        return (
-            <div className="h-full w-full overflow-y-auto">
-                {children}
-            </div>
-        );
-    }
+        // If it's a driver route, the driver layout handles its own navigation
+        // So we just render children without passenger navigation
+        if (isDriverRoute) {
+            return (
+                <div className="h-full w-full overflow-y-auto">
+                    {children}
+                </div>
+            );
+        }
 
-    // Normal layout with passenger navigation
+        // Normal layout with passenger navigation
+        return (
+            <>
+                <DesktopSidebar />
+                <div className="flex-1 h-full w-full md:pl-64 transition-all duration-300 relative overflow-y-auto">
+                    {children}
+                </div>
+                <MobileNavBar />
+            </>
+        );
+    };
+
     return (
-        <>
-            <DesktopSidebar />
-            <div className="flex-1 h-full w-full md:pl-64 transition-all duration-300 relative overflow-y-auto">
-                {children}
-            </div>
-            <MobileNavBar />
-        </>
+        <MeshProvider>
+            {renderContent()}
+        </MeshProvider>
     );
 }

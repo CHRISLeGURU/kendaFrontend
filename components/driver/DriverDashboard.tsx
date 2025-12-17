@@ -14,7 +14,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { type Ride } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
@@ -26,6 +27,7 @@ import "leaflet/dist/leaflet.css";
 // Components
 import DriverNavigationScreen from "./DriverNavigationScreen";
 import DriverRideSummary from "./DriverRideSummary";
+import RideOfferScreen from "./RideOfferScreen";
 import { AnimatePresence, motion } from "framer-motion";
 
 // --- CUSTOM MARKER ICONS ---
@@ -87,6 +89,8 @@ export function DriverDashboard({
     const t = useTranslations('Driver');
     const { user } = useAuth();
     const supabase = createClient();
+    const locale = useLocale();
+    const router = useRouter();
 
     // --- STATE ---
     const [isMounted, setIsMounted] = useState(false);
@@ -105,6 +109,7 @@ export function DriverDashboard({
     // Loading States
     const [isTogglingOnline, setIsTogglingOnline] = useState(false);
     const [isAcceptingRide, setIsAcceptingRide] = useState(false);
+    const [unpaidFinesCount, setUnpaidFinesCount] = useState(0); // Notifications amendes
 
     // Derived
     const driverName = propName || user?.user_metadata?.full_name || "Chauffeur";
@@ -112,6 +117,9 @@ export function DriverDashboard({
 
     // Refs for Realtime
     const isOnlineRef = useRef(isOnline);
+    const myLocationRef = useRef(myLocation);
+
+    useEffect(() => { myLocationRef.current = myLocation; }, [myLocation]);
 
     useEffect(() => {
         setIsMounted(true);
@@ -146,26 +154,33 @@ export function DriverDashboard({
         let pollInterval: NodeJS.Timeout;
 
         const fetchAvailableRides = async () => {
-            // Only fetch rides from the last 30 minutes to avoid stale data
-            const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000).toISOString();
+            // DEBUG: Removed time filter to rule out timezone issues
+            // const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000).toISOString();
 
+            // 1. Fetch SEARCHING rides
             const { data, error } = await supabase
                 .from('rides')
                 .select('*')
                 .eq('status', 'SEARCHING')
-                .gte('created_at', thirtyMinutesAgo)
                 .not('pickup_lat', 'is', null)
                 .not('pickup_lng', 'is', null);
 
             if (error) {
-                console.error('[fetchAvailableRides] Error:', error);
+                console.error('[fetchAvailableRides] Error:', error.message);
                 return;
             }
 
-            console.log('[fetchAvailableRides] Found', data?.length || 0, 'rides');
+            // 2. RLS Diagnostic: Check if we can see ANY rides at all?
+            const { count } = await supabase.from('rides').select('*', { count: 'exact', head: true });
+            console.log(`[Diagnostic] Total visible rides in DB: ${count}`);
+
+            console.log('[fetchAvailableRides] Found', data?.length || 0, 'rides with status SEARCHING');
+            if (data && data.length > 0) {
+                console.log('[First Ride Sample]:', data[0]);
+            }
+
             // Only update if no active ride
             setAvailableRides(prev => {
-                // If we already have selected ride, ensure it is kept or updated
                 return data || [];
             });
         };
@@ -198,6 +213,15 @@ export function DriverDashboard({
 
             // Listen for available rides immediately
             await fetchAvailableRides();
+
+            // Fetch Unpaid Fines Count
+            const { count: finesCount } = await supabase
+                .from('fines')
+                .select('*', { count: 'exact', head: true })
+                .eq('offender_id', user.id)
+                .eq('status', 'UNPAID');
+
+            setUnpaidFinesCount(finesCount || 0);
 
             // Fallback: Poll every 5 seconds to ensure we don't miss any rides
             pollInterval = setInterval(fetchAvailableRides, 5000);
@@ -280,8 +304,56 @@ export function DriverDashboard({
     useEffect(() => {
         if (!user) return;
 
-        // Channel for RIDES (Clients)
-        console.log("🔔 [Driver] Setting up realtime subscription for rides...");
+        // 1. DISPATCH CHANNEL (Radar Mode - New Ride Alerts)
+        console.log("🔔 [Driver] Listening to dispatch-room...");
+        const dispatchChannel = supabase.channel('dispatch-room')
+            .on('postgres_changes', {
+                event: 'INSERT',
+                schema: 'public',
+                table: 'rides',
+                filter: 'status=eq.SEARCHING'
+            }, (payload) => {
+                const ride = payload.new as any;
+                console.log("🔔 [Dispatch] New Ride Detected:", ride.id);
+
+                const myLoc = myLocationRef.current;
+                if (!myLoc || !ride.pickup_lat || !ride.pickup_lng) {
+                    console.log("⚠️ [Dispatch] Missing location data for distance calculation");
+                    return;
+                }
+
+                // Calculate Distance
+                const distMeters = L.latLng(myLoc[0], myLoc[1]).distanceTo(L.latLng(ride.pickup_lat, ride.pickup_lng));
+                const distKm = distMeters / 1000;
+                console.log(`📏 Distance to pickup: ${distKm.toFixed(2)} km`);
+
+                // Filter < 5 km
+                if (distKm < 5) {
+                    console.log("🎯 [Dispatch] Ride within range! Triggering Alert.");
+
+                    // Play Sound
+                    try {
+                        const audio = new Audio('/sounds/notification.mp3');
+                        audio.play().catch(err => console.error("Could not play notification sound:", err));
+                    } catch (e) {
+                        console.error("Audio initialization failed", e);
+                    }
+
+                    // Show Offer Screen
+                    setSelectedRide({
+                        ...ride,
+                        distance_km: distKm.toFixed(1),
+                        isRadarMatch: true
+                    });
+                } else {
+                    console.log("Too far to auto-dispatch.");
+                }
+            })
+            .subscribe();
+
+
+        // 2. MAP STATE CHANNEL (Keep map pins updated)
+        console.log("🔔 [Driver] Setting up map state subscription...");
         const ridesChannel = supabase.channel('radar-rides')
             .on('postgres_changes', {
                 event: '*',
@@ -291,13 +363,6 @@ export function DriverDashboard({
                 const newRide = payload.new as any;
                 const oldRide = payload.old as any;
                 const eventType = payload.eventType; // 'INSERT', 'UPDATE', 'DELETE'
-
-                console.log(`📥 [Driver] Realtime event: ${eventType}`, {
-                    id: newRide?.id?.slice(0, 8),
-                    status: newRide?.status,
-                    driver_id: newRide?.driver_id,
-                    pickup_lat: newRide?.pickup_lat
-                });
 
                 // Logic for Targeted Rides (Direct Requests)
                 if ((eventType === 'INSERT' || eventType === 'UPDATE') && newRide.status === 'SEARCHING') {
@@ -311,33 +376,27 @@ export function DriverDashboard({
                             return exists ? prev.map(r => r.id === newRide.id ? newRide : r) : [...prev, newRide];
                         });
                         return;
-                    } else if (newRide.driver_id && newRide.driver_id !== user.id) {
-                        // For someone else - Ignore
-                        console.log("👤 [Driver] Ride assigned to another driver, ignoring");
-                        return;
                     }
+                    // If it WAS for me but now reassigned or cancelled? Handled in UPDATE below.
                 }
 
                 if (eventType === 'INSERT') {
                     // New ride request - add if it's open for anyone
                     if (newRide.status === 'SEARCHING' && newRide.pickup_lat && newRide.pickup_lng) {
-                        console.log("🆕 [Driver] New ride request added to map!");
                         setAvailableRides((prev: any[]) => {
-                            // Avoid duplicates
                             if (prev.find(r => r.id === newRide.id)) return prev;
                             return [...prev, newRide];
                         });
                     }
                 } else if (eventType === 'UPDATE') {
                     if (newRide.status === 'SEARCHING') {
-                        // If it became assigned to someone else (and processed above as not for me), remove it
+                        // If assigned to someone else, remove it
                         if (newRide.driver_id && newRide.driver_id !== user.id) {
                             setAvailableRides((prev: any[]) => prev.filter(r => r.id !== newRide.id));
                             if (selectedRide?.id === newRide.id) setSelectedRide(null);
                             return;
                         }
-
-                        // Ensure it's in the list (general update)
+                        // Update in list
                         setAvailableRides((prev: any[]) => {
                             const exists = prev.find(r => r.id === newRide.id);
                             return exists ? prev.map(r => r.id === newRide.id ? newRide : r) : [...prev, newRide];
@@ -356,7 +415,7 @@ export function DriverDashboard({
             })
             .subscribe();
 
-        // Channel for DRIVERS (Competition)
+        // 3. COMPETITION CHANNEL (Other Drivers)
         const driversChannel = supabase.channel('radar-drivers')
             .on('postgres_changes', {
                 event: '*',
@@ -380,9 +439,42 @@ export function DriverDashboard({
             })
             .subscribe();
 
+        // 4. FINES CHANNEL (Notifications)
+        const finesChannel = supabase.channel('fines-alerts')
+            .on('postgres_changes', {
+                event: '*', // INSERT (new fine) or UPDATE (paid status change)
+                schema: 'public',
+                table: 'fines',
+                filter: `offender_id=eq.${user.id}`
+            }, async (payload) => {
+                const newFine = payload.new as any;
+                console.log("👮 [Fines] Update detected:", newFine);
+
+                // Refetch count to be accurate
+                const { count } = await supabase
+                    .from('fines')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('offender_id', user.id)
+                    .eq('status', 'UNPAID');
+
+                setUnpaidFinesCount(count || 0);
+
+                if (payload.eventType === 'INSERT') {
+                    // Alert Sound
+                    try {
+                        const audio = new Audio('/sounds/notification.mp3');
+                        audio.play().catch(e => console.error(e));
+                    } catch (e) { }
+                    alert(`⚠️ Nouvelle contravention reçue : ${newFine.reason}`);
+                }
+            })
+            .subscribe();
+
         return () => {
+            supabase.removeChannel(dispatchChannel);
             supabase.removeChannel(ridesChannel);
             supabase.removeChannel(driversChannel);
+            supabase.removeChannel(finesChannel);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, selectedRide]);
@@ -541,24 +633,39 @@ export function DriverDashboard({
                 </div>
 
                 {/* Online Toggle Button */}
-                <button
-                    onClick={handleToggleOnline}
-                    className={cn(
-                        "pointer-events-auto h-12 px-4 rounded-full flex items-center gap-2 font-bold shadow-xl transition-all active:scale-95 border",
-                        isOnline
-                            ? "bg-black/80 backdrop-blur border-white/10 text-red-500 hover:bg-neutral-900"
-                            : "bg-yellow-500 text-black border-yellow-400 hover:bg-yellow-400"
-                    )}
-                >
-                    {isTogglingOnline ? (
-                        <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                    ) : (
-                        <>
-                            <Power size={20} />
-                            <span>{isOnline ? "STOP" : "GO !"}</span>
-                        </>
-                    )}
-                </button>
+                <div className="flex items-center gap-3">
+                    {/* Fines Notification */}
+                    <button
+                        onClick={() => router.push(`/${locale}/driver/fines`)}
+                        className="relative h-12 w-12 rounded-full bg-black/80 backdrop-blur border border-white/10 flex items-center justify-center shadow-xl hover:bg-neutral-900 transition-all pointer-events-auto"
+                    >
+                        <ShieldAlert size={20} className={unpaidFinesCount > 0 ? "text-red-500" : "text-neutral-400"} />
+                        {unpaidFinesCount > 0 && (
+                            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-600 rounded-full flex items-center justify-center text-[10px] font-bold text-white border-2 border-black">
+                                {unpaidFinesCount}
+                            </div>
+                        )}
+                    </button>
+
+                    <button
+                        onClick={handleToggleOnline}
+                        className={cn(
+                            "pointer-events-auto h-12 px-4 rounded-full flex items-center gap-2 font-bold shadow-xl transition-all active:scale-95 border",
+                            isOnline
+                                ? "bg-black/80 backdrop-blur border-white/10 text-red-500 hover:bg-neutral-900"
+                                : "bg-yellow-500 text-black border-yellow-400 hover:bg-yellow-400"
+                        )}
+                    >
+                        {isTogglingOnline ? (
+                            <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                            <>
+                                <Power size={20} />
+                                <span>{isOnline ? "STOP" : "GO !"}</span>
+                            </>
+                        )}
+                    </button>
+                </div>
             </div>
 
             {/* MAP LAYERS */}
@@ -628,114 +735,12 @@ export function DriverDashboard({
             {/* BOTTOM SHEET - Ride Details */}
             <AnimatePresence>
                 {selectedRide && (
-                    <motion.div
-                        initial={{ y: "100%" }}
-                        animate={{ y: 0 }}
-                        exit={{ y: "100%" }}
-                        transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className={cn(
-                            "absolute bottom-0 left-0 right-0 z-[60] rounded-t-[32px] border-t shadow-2xl p-6 pb-safe safe-area-bottom",
-                            (selectedRide as any).isTargeted
-                                ? "bg-red-950/95 border-red-500/50"
-                                : "bg-[#121212] border-white/10"
-                        )}
-                    >
-                        <div className="w-12 h-1 bg-neutral-700 rounded-full mx-auto mb-6" />
-
-                        <div className="flex justify-between items-start mb-6">
-                            <div>
-                                <h3 className={cn(
-                                    "text-xs font-bold uppercase tracking-wider mb-1",
-                                    (selectedRide as any).isTargeted ? "text-red-400 animate-pulse" : "text-neutral-400"
-                                )}>
-                                    {(selectedRide as any).isTargeted ? "⚠️ PRIO : CLIENT VOUS A CHOISI !" : "Nouvelle Course"}
-                                </h3>
-                                <div className="flex items-center gap-2">
-                                    <h2 className="text-2xl font-bold text-white">{(selectedRide.price || 0).toLocaleString()} FC</h2>
-                                    <span className="px-2 py-0.5 bg-neutral-800 rounded text-xs text-neutral-400">Cash</span>
-                                </div>
-                            </div>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="rounded-full hover:bg-white/10"
-                                onClick={() => setSelectedRide(null)}
-                            >
-                                <X className="text-white" />
-                            </Button>
-                        </div>
-
-                        <div className="space-y-4 mb-8">
-                            {/* Pickup */}
-                            <div className="flex gap-4">
-                                <div className="flex flex-col items-center pt-1">
-                                    <div className="w-3 h-3 bg-green-500 rounded-full shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
-                                    <div className="w-0.5 h-full bg-neutral-800 my-1" />
-                                </div>
-                                <div className="flex-1 pb-4 border-b border-white/5">
-                                    <p className="text-xs text-neutral-500 mb-1">Lieu de prise en charge</p>
-                                    <p className="text-white font-medium text-sm line-clamp-1">
-                                        {selectedRide.pickup_address || "Position actuelle"}
-                                    </p>
-                                    {myLocation && selectedRide.pickup_lat && selectedRide.pickup_lng && (
-                                        <p className="text-neutral-400 text-xs mt-1 flex items-center gap-1">
-                                            <Navigation size={12} />
-                                            À {
-                                                (() => {
-                                                    const distMeters = L.latLng(myLocation[0], myLocation[1]).distanceTo(
-                                                        L.latLng(selectedRide.pickup_lat, selectedRide.pickup_lng)
-                                                    );
-                                                    return distMeters > 1000
-                                                        ? `${(distMeters / 1000).toFixed(1)} km`
-                                                        : `${Math.round(distMeters)} m`;
-                                                })()
-                                            } de vous
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Destination */}
-                            <div className="flex gap-4">
-                                <div className="flex flex-col items-center pt-1">
-                                    <div className="w-3 h-3 border-2 border-yellow-500 rounded-sm" />
-                                </div>
-                                <div className="flex-1">
-                                    <p className="text-xs text-neutral-500 mb-1">Destination</p>
-                                    <p className="text-white font-medium text-sm line-clamp-1">
-                                        {selectedRide.dest_address || "Destination définie"}
-                                    </p>
-                                    <div className="flex gap-4 mt-2">
-                                        <div className="flex items-center gap-1.5 bg-neutral-900 px-2 py-1 rounded text-neutral-300 text-xs">
-                                            <Clock size={12} />
-                                            {selectedRide.duration_minutes ? `~${selectedRide.duration_minutes} min` : "-- min"}
-                                        </div>
-                                        <div className="flex items-center gap-1.5 bg-neutral-900 px-2 py-1 rounded text-neutral-300 text-xs">
-                                            <Navigation size={12} />
-                                            {selectedRide.distance_km} km
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-3">
-                            <Button
-                                className="flex-1 bg-[#22C55E] hover:bg-[#16A34A] text-white font-bold h-14 rounded-xl text-lg shadow-[0_4px_20px_rgba(34,197,94,0.3)] disabled:opacity-50"
-                                onClick={handleAcceptRide}
-                                disabled={isAcceptingRide}
-                            >
-                                {isAcceptingRide ? (
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                                        <span>ACCEPTATION...</span>
-                                    </div>
-                                ) : (
-                                    "ACCEPTER LA COURSE"
-                                )}
-                            </Button>
-                        </div>
-                    </motion.div>
+                    <RideOfferScreen
+                        ride={selectedRide}
+                        onAccept={handleAcceptRide}
+                        onDecline={() => setSelectedRide(null)}
+                        autoDecline={(selectedRide as any).isRadarMatch || (selectedRide as any).isTargeted}
+                    />
                 )}
             </AnimatePresence>
 

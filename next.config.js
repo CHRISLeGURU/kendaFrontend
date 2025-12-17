@@ -14,6 +14,22 @@ const nextConfig = {
             },
         ],
     },
+    webpack: function (config, { isServer }) {
+        config.experiments = {
+            ...config.experiments,
+            asyncWebAssembly: true,
+            layers: true,
+            topLevelAwait: true, // Enable top-level await for WASM modules
+        };
+        // Fix for MeshSDK / WebAssembly issues - explicit rule for .wasm files
+        config.module.rules.push({
+            test: /\.wasm$/,
+            type: "webassembly/async",
+        });
+
+        config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
+        return config;
+    },
 }
 
 module.exports = withNextIntl(nextConfig);

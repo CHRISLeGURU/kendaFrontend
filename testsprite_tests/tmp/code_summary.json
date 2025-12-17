@@ -1,0 +1,82 @@
+{
+  "tech_stack": [
+    "TypeScript",
+    "Next.js 14 (App Router)",
+    "React 18",
+    "Supabase (PostgreSQL + Realtime)",
+    "Tailwind CSS",
+    "Leaflet / React-Leaflet",
+    "Framer Motion",
+    "Google Generative AI (Gemini API)"
+  ],
+  "features": [
+    {
+      "name": "AI Chat Assistant",
+      "description": "POST endpoint that proxies user messages to Google Gemini to provide multilingual in-app assistance.",
+      "files": [
+        "app/api/chat/route.ts"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Kenda Chat API",
+          "version": "1.0.0"
+        },
+        "paths": {
+          "/api/chat": {
+            "post": {
+              "summary": "Generate a chat reply via Gemini",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "messages": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "role": { "type": "string" },
+                              "content": { "type": "string" }
+                            },
+                            "required": ["role", "content"]
+                          },
+                          "minItems": 1
+                        }
+                      },
+                      "required": ["messages"]
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "200": {
+                  "description": "Chat response from Gemini",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "content": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Invalid request body"
+                },
+                "500": {
+                  "description": "Server or Gemini error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+

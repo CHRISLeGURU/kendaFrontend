@@ -1,195 +1,212 @@
 "use client";
 
-import React, { useState } from "react";
-import { Wallet, Plus, List, Copy, ExternalLink, RefreshCw, CreditCard } from "lucide-react";
+import React from "react";
+import { List, Plus, CreditCard, Send, QrCode, ArrowUpRight, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { CardanoWalletConnect } from "@/components/wallet/CardanoWalletConnect";
+import { motion } from "framer-motion";
+import { PaymentModal } from "./PaymentModal";
+import { Html5QrcodeScanner } from "html5-qrcode";
+import { useState, useEffect } from "react";
+import { X, Camera } from "lucide-react";
 
 export function WalletScreen() {
     const t = useTranslations('Wallet');
-    const tCommon = useTranslations('Common');
-    // Mock state for connection (toggleable for demo)
-    const [isConnected, setIsConnected] = useState(false);
-    const [balance, setBalance] = useState("450.00");
-    const [address, setAddress] = useState("addr1...zx9");
+
+    // Send State
+    const [showSendForm, setShowSendForm] = useState(false);
+    const [sendAddr, setSendAddr] = useState("");
+    const [sendAmount, setSendAmount] = useState("");
+    const [isScanning, setIsScanning] = useState(false);
+
+    // Payment Modal Logic
+    const [isPayModalOpen, setIsPayModalOpen] = useState(false);
+
+    // QR Logic
+    useEffect(() => {
+        if (isScanning) {
+            const scanner = new Html5QrcodeScanner(
+                "reader",
+                { fps: 10, qrbox: 250 },
+                /* verbose= */ false
+            );
+            scanner.render((decodedText) => {
+                setSendAddr(decodedText);
+                setIsScanning(false);
+                scanner.clear();
+            }, (error) => {
+                // console.warn(error);
+            });
+
+            return () => {
+                scanner.clear().catch(err => console.error("Failed to clear scanner", err));
+            };
+        }
+    }, [isScanning]);
+
+    const handleSendSubmit = () => {
+        if (!sendAddr || !sendAmount) return alert("Veuillez remplir tous les champs");
+        setShowSendForm(false);
+        setIsPayModalOpen(true);
+    };
 
     return (
-        <div className="h-full overflow-y-auto bg-black text-white pb-24 pt-safe">
-            {/* Header */}
-            <header className="sticky top-0 z-10 bg-black/80 backdrop-blur-md -mx-4 px-4 py-4 mb-6 border-b border-[#1A1A1A]">
-                <h1 className="text-xl font-heading font-bold text-white text-center">
-                    {t('title')}
-                </h1>
-            </header>
+        <div className="h-full overflow-y-auto bg-black text-white pb-24 relative">
+            {/* Background Ambient Glow */}
+            <div className="fixed top-0 left-0 w-full h-96 bg-gradient-to-b from-[#F0B90B]/10 to-transparent pointer-events-none z-0" />
 
-            <div className="px-4 space-y-8">
-                {/* Connection Toggle (For Demo Purposes) */}
-                <div className="flex justify-center opacity-50 hover:opacity-100 transition-opacity">
-                    <button
-                        onClick={() => setIsConnected(!isConnected)}
-                        className="text-xs text-[#9A9A9A] underline"
-                    >
-                        [DEV: Toggle Connection State]
-                    </button>
+            {/* Header / Greeting */}
+            <header className="relative z-10 px-6 pt-8 pb-4">
+                <div className="flex justify-between items-start mb-6">
+                    <div>
+                        <h1 className="text-3xl font-heading font-black text-white mb-1">
+                            Mon Portefeuille
+                        </h1>
+                        <p className="text-[#999] text-sm font-medium">
+                            Gérez vos actifs crypto & fiat
+                        </p>
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-[#1A1A1A] border border-[#333] flex items-center justify-center">
+                        <QrCode className="w-5 h-5 text-[#F0B90B]" />
+                    </div>
                 </div>
 
-                <AnimatePresence mode="wait">
-                    {isConnected ? (
-                        <motion.div
-                            key="connected"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            className="space-y-8"
-                        >
-                            {/* Cardano Card */}
-                            <div className="relative w-full aspect-[1.586] bg-gradient-to-br from-[#1A1A1A] to-black rounded-2xl border border-[#F0B90B]/50 p-6 flex flex-col justify-between overflow-hidden shadow-2xl shadow-[#F0B90B]/10">
-                                {/* Background Pattern/Watermark */}
-                                <div className="absolute -right-10 -top-10 opacity-5 pointer-events-none">
-                                    <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor" className="text-white">
-                                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                                    </svg>
-                                </div>
+                {/* Main Connect Component */}
+                <div className="mb-8">
+                    <CardanoWalletConnect />
+                </div>
 
-                                {/* Top Row */}
-                                <div className="flex justify-between items-start z-10">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-8 h-8 rounded-full bg-[#F0B90B]/20 flex items-center justify-center">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                                            </svg>
-                                        </div>
-                                        <span className="font-bold text-white tracking-wider">CARDANO</span>
-                                    </div>
-                                    <span className="text-[#F0B90B] font-mono text-xs bg-[#F0B90B]/10 px-2 py-1 rounded">
-                                        MAINNET
-                                    </span>
-                                </div>
+                {/* Quick Actions Grid */}
+                <div className="grid grid-cols-3 gap-3 mb-8">
+                    <ActionButton icon={Plus} label="Recharger" onClick={() => alert("Bientôt disponible")} />
+                    <ActionButton icon={Send} label="Payer Chauffeur" onClick={() => setShowSendForm(true)} />
+                    <ActionButton icon={ArrowUpRight} label="Retirer" onClick={() => alert("Bientôt disponible")} />
+                </div>
 
-                                {/* Balance */}
-                                <div className="z-10">
-                                    <p className="text-[#9A9A9A] text-xs font-medium mb-1 uppercase tracking-wider">{t('availableBalance')}</p>
-                                    <div className="flex items-baseline gap-2">
-                                        <h2 className="text-4xl font-heading font-bold text-white tracking-tight">
-                                            {balance}
-                                        </h2>
-                                        <span className="text-xl font-medium text-[#F0B90B]">ADA</span>
-                                    </div>
-                                    <p className="text-[#9A9A9A] text-sm mt-1">≈ $180.00 USD</p>
-                                </div>
+                {/* Recent Activity Section */}
+                <div>
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-bold text-white">Activité Récente</h3>
+                        <Button variant="ghost" size="sm" className="text-[#F0B90B] hover:text-[#F0B90B] hover:bg-[#F0B90B]/10 text-xs h-8">
+                            Tout voir
+                        </Button>
+                    </div>
 
-                                {/* Address */}
-                                <div className="flex items-center justify-between z-10">
-                                    <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-lg border border-white/5 backdrop-blur-sm">
-                                        <span className="font-mono text-xs text-[#9A9A9A]">{address}</span>
-                                        <Copy className="w-3 h-3 text-[#F0B90B] cursor-pointer hover:text-white" />
-                                    </div>
-                                    <div className="w-8 h-5 rounded bg-[#F0B90B]/20 flex items-center justify-center border border-[#F0B90B]/30">
-                                        <div className="w-4 h-4 rounded-full bg-[#F0B90B]" />
-                                    </div>
-                                </div>
+                    <div className="space-y-3">
+                        {/* Empty State Friendly */}
+                        <div className="p-6 rounded-2xl bg-[#0F0F0F] border border-[#1F1F1F] text-center">
+                            <div className="w-12 h-12 bg-[#1A1A1A] rounded-full flex items-center justify-center mx-auto mb-3">
+                                <History className="w-5 h-5 text-[#666]" />
                             </div>
-
-                            {/* Quick Actions */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <Button
-                                    className="h-14 bg-[#F0B90B] text-black hover:bg-[#F0B90B]/90 border-0 font-bold text-base rounded-xl shadow-lg shadow-[#F0B90B]/10"
-                                    onClick={() => alert("Fonctionnalité à venir")}
-                                >
-                                    <Plus className="w-5 h-5 mr-2" />
-                                    {t('recharge')}
-                                </Button>
-                                <Button
-                                    variant="secondary"
-                                    className="h-14 bg-[#1A1A1A] text-white hover:bg-[#252525] border border-[#333] font-medium text-base rounded-xl"
-                                    onClick={() => alert("Fonctionnalité à venir")}
-                                >
-                                    <List className="w-5 h-5 mr-2 text-[#9A9A9A]" />
-                                    {t('history')}
-                                </Button>
-                            </div>
-
-                            {/* Recent Transactions Preview */}
-                            <div>
-                                <h3 className="text-lg font-bold text-white mb-4">{t('recentTransactions')}</h3>
-                                <div className="space-y-3">
-                                    <TransactionItem
-                                        type="credit"
-                                        label={t('mockTx1')}
-                                        date={`${tCommon('today')}, 10:23`}
-                                        amount="+ 50 ADA"
-                                    />
-                                    <TransactionItem
-                                        type="debit"
-                                        label={t('mockTx2')}
-                                        date={`${tCommon('yesterday')}, 18:45`}
-                                        amount="- 12 ADA"
-                                    />
-                                </div>
-                            </div>
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key="disconnected"
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="flex flex-col items-center justify-center py-12 px-4 text-center"
-                        >
-                            <div className="w-24 h-24 bg-[#1A1A1A] rounded-full flex items-center justify-center mb-8 border-2 border-[#1A1A1A] shadow-2xl">
-                                <Wallet className="w-10 h-10 text-[#F0B90B]" />
-                            </div>
-
-                            <h2 className="text-2xl font-heading font-bold text-white mb-3">
-                                {t('connectTitle')}
-                            </h2>
-                            <p className="text-[#9A9A9A] mb-8 max-w-xs mx-auto leading-relaxed">
-                                {t('connectDesc')}
+                            <p className="text-white font-medium mb-1">C'est calme ici...</p>
+                            <p className="text-[#666] text-xs leading-relaxed max-w-[200px] mx-auto">
+                                Vos futures transactions apparaîtront ici une fois que vous aurez commencé à utiliser votre wallet.
                             </p>
+                        </div>
+                    </div>
+                </div>
+            </header>
 
-                            <Button
-                                onClick={() => setIsConnected(true)}
-                                className="w-full max-w-xs h-14 bg-[#F0B90B] text-black font-bold text-lg rounded-xl shadow-lg hover:bg-[#F0B90B]/90"
+
+            {/* Send Form Modal */}
+            {
+                showSendForm && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4 backdrop-blur-sm">
+                        <div className="bg-[#101010] border border-[#252525] rounded-2xl p-6 w-full max-w-sm animate-in zoom-in-95 relative">
+                            <button onClick={() => setShowSendForm(false)} className="absolute top-4 right-4 text-gray-400">
+                                <X size={20} />
+                            </button>
+                            <h3 className="text-xl font-bold mb-4">Envoyer ADA</h3>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="text-xs text-gray-400 block mb-1">Adresse Portefeuille</label>
+                                    <div className="flex gap-2">
+                                        <input
+                                            className="bg-[#1A1A1A] border border-[#333] rounded-lg px-3 py-2 w-full text-sm outline-none focus:border-[#F0B90B]"
+                                            placeholder="addr1..."
+                                            value={sendAddr}
+                                            onChange={e => setSendAddr(e.target.value)}
+                                        />
+                                        <button
+                                            onClick={() => setIsScanning(true)}
+                                            className="bg-[#222] hover:bg-[#333] p-2 rounded-lg text-[#F0B90B] border border-[#333]"
+                                            title="Scanner QR"
+                                        >
+                                            <Camera size={20} />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="text-xs text-gray-400 block mb-1">Montant (ADA)</label>
+                                    <input
+                                        type="number"
+                                        className="bg-[#1A1A1A] border border-[#333] rounded-lg px-3 py-2 w-full text-sm outline-none focus:border-[#F0B90B]"
+                                        placeholder="ex: 50"
+                                        value={sendAmount}
+                                        onChange={e => setSendAmount(e.target.value)}
+                                    />
+                                </div>
+
+                                <Button
+                                    onClick={handleSendSubmit}
+                                    className="w-full bg-[#F0B90B] hover:bg-[#e0b010] text-black font-bold mt-2"
+                                >
+                                    Continuer
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            {/* Scanner Overlay */}
+            {
+                isScanning && (
+                    <div className="fixed inset-0 z-[60] bg-black flex flex-col items-center justify-center p-4">
+                        <div className="w-full max-w-sm bg-white rounded-xl overflow-hidden relative">
+                            <div id="reader" className="w-full"></div>
+                            <button
+                                onClick={() => setIsScanning(false)}
+                                className="absolute top-2 right-2 bg-black/50 text-white p-2 rounded-full"
                             >
-                                {t('connectBtn')}
-                            </Button>
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <p className="text-white mt-4 text-sm">Scannez le code QR du chauffeur</p>
+                        <button onClick={() => setIsScanning(false)} className="mt-8 text-neutral-400">Annuler</button>
+                    </div>
+                )
+            }
 
-                            <p className="mt-6 text-xs text-[#555]">
-                                {t('supportedWallets')}
-                            </p>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
-        </div>
+            <PaymentModal
+                isOpen={isPayModalOpen}
+                onClose={() => setIsPayModalOpen(false)}
+                amount={`${sendAmount} ADA`}
+                recipientAddress={sendAddr}
+                isAda={true}
+                onSuccess={async (txHash) => { alert("Envoyé ! HASH: " + txHash); }}
+                title="Confirmer l'envoi"
+                description={`Envoi de ${sendAmount} ADA`}
+            />
+
+        </div >
     );
 }
 
-function TransactionItem({ type, label, date, amount }: { type: 'credit' | 'debit', label: string, date: string, amount: string }) {
-    const isCredit = type === 'credit';
-
+function ActionButton({ icon: Icon, label, onClick }: { icon: any, label: string, onClick: () => void }) {
     return (
-        <div className="flex items-center justify-between p-4 bg-[#0C0C0C] rounded-xl border border-[#1A1A1A]">
-            <div className="flex items-center gap-3">
-                <div className={cn(
-                    "w-10 h-10 rounded-full flex items-center justify-center",
-                    isCredit ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500"
-                )}>
-                    {isCredit ? <Plus className="w-5 h-5" /> : <CreditCard className="w-5 h-5" />}
-                </div>
-                <div className="text-left">
-                    <p className="font-bold text-white text-sm">{label}</p>
-                    <p className="text-xs text-[#9A9A9A]">{date}</p>
-                </div>
+        <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={onClick}
+            className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl bg-[#0F0F0F] border border-[#1F1F1F] hover:bg-[#1A1A1A] hover:border-[#F0B90B]/30 transition-all group"
+        >
+            <div className="w-10 h-10 rounded-full bg-[#1A1A1A] group-hover:bg-[#F0B90B]/20 flex items-center justify-center transition-colors">
+                <Icon className="w-5 h-5 text-white group-hover:text-[#F0B90B] transition-colors" />
             </div>
-            <span className={cn(
-                "font-mono font-bold",
-                isCredit ? "text-green-500" : "text-white"
-            )}>
-                {amount}
-            </span>
-        </div>
+            <span className="text-xs font-bold text-[#999] group-hover:text-white transition-colors">{label}</span>
+        </motion.button>
     );
 }

@@ -1,0 +1,19 @@
+{
+  "status": "commited",
+  "type": "backend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "backendAuthType": "basic token",
+  "backendUsername": "peter23xp@gmail.com",
+  "backendPassword": "3Seniors?",
+  "executionArgs": {
+    "projectName": "kendaFrontend",
+    "projectPath": "D:\\kendaFrontend",
+    "testIds": [],
+    "additionalInstruction": "",
+    "envs": {
+      "API_KEY": "sk-user-jaJo1_JWxiL_BilRuciSZElTiWbq4PdhMmjdWj6gUKBv4L1I4ZnTQc7TQR-C1njg322bHvgBpWKskInlVueEHcZoDWPZP-mHPO8OwS6vbRN9rtzPPoEIlfXbyiOJwvxNLt0"
+    }
+  },
+  "proxy": "http://18c2c66d-4bc9-45d1-9163-fe70e9ca42fc:IrSFWt0i4WmFEvZMgCM69LVM4ymNucdA@tun.testsprite.com:8080"
+}
