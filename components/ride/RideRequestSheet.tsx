@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { CryptoInfoModal } from "./CryptoInfoModal";
 
 import { type DriverLocation } from "@/types";
 
@@ -33,6 +34,7 @@ export const RideRequestSheet = ({
     const [estimatedPrice, setEstimatedPrice] = useState<number | null>(null);
     const [estimatedTime, setEstimatedTime] = useState<number | null>(null);
     const [exchangeRate, setExchangeRate] = useState<number | null>(null);
+    const [showCryptoInfo, setShowCryptoInfo] = useState(false);
 
     // Fetch exchange rate on mount
     useEffect(() => {
@@ -192,35 +194,47 @@ export const RideRequestSheet = ({
                     </div>
                 )}
 
+                {/* Payment Method Section (Teaser) */}
+                <div className="mb-8">
+                    <span className="text-[#9A9A9A] text-sm font-medium mb-3 block">Mode de paiement</span>
+                    <button
+                        onClick={() => setShowCryptoInfo(true)}
+                        className="w-full relative overflow-hidden rounded-xl border border-[#F0B90B]/30 bg-[#F0B90B]/5 p-4 flex items-center justify-between cursor-pointer hover:bg-[#F0B90B]/10 transition-colors"
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-[#F0B90B]/20 flex items-center justify-center">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F0B90B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                                </svg>
+                            </div>
+                            <div className="text-left">
+                                <p className="text-white font-bold">Payer en ADA</p>
+                                <p className="text-xs text-[#F0B90B]">Via Cardano Blockchain</p>
+                            </div>
+                        </div>
+                        <span className="bg-[#F0B90B] text-black text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">
+                            Soon
+                        </span>
+                    </button>
+                </div>
+
                 {/* Action Buttons */}
                 <div className="flex items-center gap-3">
-                    {/* Schedule Button */}
-                    <button
-                        disabled={!externalDestination || !estimatedPrice}
-                        onClick={() => {
-                            // TODO: Open DatePicker modal
-                            alert(t('scheduleRide'));
-                        }}
-                        className={cn(
-                            "flex items-center justify-center h-14 w-14 rounded-xl border transition-all",
-                            "bg-[#1A1A1A] border-[#333333] text-white hover:bg-[#252525]",
-                            "disabled:opacity-50 disabled:cursor-not-allowed"
-                        )}
-                        title={t('scheduleRide')}
-                    >
-                        <CalendarClock className="w-6 h-6" />
-                    </button>
-
-                    {/* Order Button */}
+                    {/* Order Button (Always Disabled) */}
                     <Button
-                        disabled={!externalDestination || !estimatedPrice}
-                        onClick={onOrder}
-                        className="flex-1 h-14 text-lg font-bold bg-[#F0B90B] text-black hover:bg-[#F0B90B]/90 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={true}
+                        className="flex-1 h-14 text-lg font-bold bg-[#1A1A1A] text-[#555] border border-[#333] rounded-xl cursor-not-allowed"
                     >
-                        {t('orderTaxi')}
+                        {t('orderTaxi')} (Bientôt)
                     </Button>
                 </div>
             </motion.div>
+
+            {/* Crypto Info Modal */}
+            <CryptoInfoModal
+                isOpen={showCryptoInfo}
+                onClose={() => setShowCryptoInfo(false)}
+            />
         </div>
     );
 };

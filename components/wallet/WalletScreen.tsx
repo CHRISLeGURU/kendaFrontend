@@ -198,7 +198,7 @@ export function WalletScreen() {
                         className="w-full h-16 bg-[#F0B90B] text-black font-bold text-lg rounded-xl shadow-lg shadow-[#F0B90B]/10 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <span className="flex items-center gap-2">
-                            ACHETER ADA
+                            Recharger ADA
                             <ArrowRight className="w-5 h-5" />
                         </span>
                     </Button>
