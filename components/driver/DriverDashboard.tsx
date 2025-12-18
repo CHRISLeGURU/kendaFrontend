@@ -105,15 +105,25 @@ export function DriverDashboard() {
             const twoHoursAgo = new Date();
             twoHoursAgo.setHours(twoHoursAgo.getHours() - 2);
 
-            const { data } = await (supabase
+            const { data, error } = await (supabase
                 .from('rides') as any)
                 .select('*')
                 .eq('status', 'SEARCHING')
                 .gt('requested_at', twoHoursAgo.toISOString());
 
-            setAllNearbyRides(data || []);
+            if (error) {
+                console.error("Driver Radar: Error fetching rides:", error);
+            } else {
+                console.log("Driver Radar: Found", data?.length || 0, "searching rides");
+                setAllNearbyRides(data || []);
+            }
         };
+
+        // Initial fetch
         fetchRides();
+
+        // Polling fallback every 5 seconds
+        const pollInterval = setInterval(fetchRides, 5000);
 
         // Channel for new requests & radar sync
         const channel = supabase
@@ -125,6 +135,7 @@ export function DriverDashboard() {
                 filter: `status=eq.SEARCHING`
             }, (payload) => {
                 const ride = payload.new as Ride;
+                console.log("Driver Radar: New ride request received:", ride.id);
                 // Add to raw list
                 setAllNearbyRides(prev => [...prev.filter(r => r.id !== ride.id), ride]);
 
@@ -144,6 +155,7 @@ export function DriverDashboard() {
                 table: 'rides'
             }, (payload) => {
                 const updatedRide = payload.new as Ride;
+                console.log("Driver Radar: Ride update:", updatedRide.id, "->", updatedRide.status);
 
                 // Remove from radar if no longer searching
                 if (updatedRide.status !== 'SEARCHING') {
@@ -166,6 +178,7 @@ export function DriverDashboard() {
             .subscribe();
 
         return () => {
+            clearInterval(pollInterval);
             supabase.removeChannel(channel);
         };
     }, [isOnline, driverProfile]);

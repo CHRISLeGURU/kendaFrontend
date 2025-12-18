@@ -69,16 +69,40 @@ export default function MapPage() {
     useEffect(() => {
         if (!activeRideId) return;
 
-        // 1. Fetch immediately to catch any change before/during subscription
-        getRideStatus(activeRideId).then(res => {
+        console.log("Passenger: Tracking ride:", activeRideId);
+
+        // Function to sync ride status
+        const syncRideStatus = async () => {
+            const res = await getRideStatus(activeRideId);
             if (res.success && res.data) {
+                console.log("Passenger: Synced status ->", res.data.status);
                 setActiveRide(res.data);
+
                 if (['ACCEPTED', 'DRIVER_ASSIGNED', 'DRIVER_ARRIVED', 'IN_PROGRESS'].includes(res.data.status)) {
                     setRideStatus('ACTIVE');
+                } else if (res.data.status === 'COMPLETED') {
+                    alert("🎉 Course terminée ! Merci d'avoir choisi Kenda.");
+                    setRideStatus('IDLE');
+                    setActiveRideId(null);
+                    setActiveRide(null);
+                    setSelectedDriver(null);
+                    setDestination(null);
+                } else if (res.data.status === 'CANCELLED') {
+                    setRideStatus('IDLE');
+                    setActiveRideId(null);
+                    setActiveRide(null);
+                    alert("La course a été annulée.");
                 }
             }
-        });
+        };
 
+        // Initial sync
+        syncRideStatus();
+
+        // Polling fallback every 3 seconds
+        const pollInterval = setInterval(syncRideStatus, 3000);
+
+        // Real-time subscription
         const unsubscribe = subscribeToRide(activeRideId, async (ride) => {
             console.log("Passenger: WebSocket update ->", ride.status);
 
@@ -92,28 +116,32 @@ export default function MapPage() {
             if (['ACCEPTED', 'DRIVER_ASSIGNED', 'DRIVER_ARRIVED'].includes(ride.status)) {
                 setRideStatus('ACTIVE');
                 setIsDriverPickerOpen(false);
-
-                const res = await getRideStatus(activeRideId);
-                if (res.success && res.data) {
-                    setActiveRide((prev: any) => {
-                        if (prev && statusOrder.indexOf(res.data!.status) < statusOrder.indexOf(prev.status)) return prev;
-                        return res.data;
-                    });
-                }
                 if (window.navigator?.vibrate) window.navigator.vibrate(200);
             }
 
             if (ride.status === 'DRIVER_ARRIVED') {
                 alert("Votre chauffeur est arrivé !");
+            } else if (ride.status === 'IN_PROGRESS') {
+                if (window.navigator?.vibrate) window.navigator.vibrate(100);
+            } else if (ride.status === 'COMPLETED') {
+                alert("🎉 Course terminée ! Merci d'avoir choisi Kenda.");
+                setRideStatus('IDLE');
+                setActiveRideId(null);
+                setActiveRide(null);
+                setSelectedDriver(null);
+                setDestination(null);
             } else if (ride.status === 'CANCELLED') {
                 setRideStatus('IDLE');
                 setActiveRideId(null);
                 setActiveRide(null);
-                alert("La course a été annulée ou refusée.");
+                alert("La course a été annulée.");
             }
         });
 
-        return () => unsubscribe();
+        return () => {
+            clearInterval(pollInterval);
+            unsubscribe();
+        };
     }, [activeRideId]);
 
     const handleDestinationChange = (dest: [number, number] | null, dist: number) => {
