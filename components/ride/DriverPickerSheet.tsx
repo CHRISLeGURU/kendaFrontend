@@ -100,7 +100,7 @@ export const DriverPickerSheet = ({
                                             <span className="font-bold text-white">{driver.rating || '4.9'}</span>
                                         </div>
                                         <div className="w-1 h-1 rounded-full bg-[#3A3A3A]" />
-                                        <span>4 min d'attente</span>
+                                        <span>4 min d&apos;attente</span>
                                     </div>
                                 </div>
 

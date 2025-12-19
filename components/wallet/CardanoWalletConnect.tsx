@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Wallet as WalletIcon, LogOut, ChevronRight, Loader2, QrCode, Copy, X } from "lucide-react";
 import QRCode from "react-qr-code";
 import { getAdaExchangeRate } from "@/lib/converter";
+import Image from "next/image";
 
 export function CardanoWalletConnect() {
     const { connected, wallet, connect, disconnect, name, connecting } = useWallet();
@@ -115,7 +116,7 @@ export function CardanoWalletConnect() {
                                     >
                                         <div className="flex items-center gap-3">
                                             {w.icon && (
-                                                <img src={w.icon} alt={w.name} className="w-8 h-8 rounded-lg" />
+                                                <Image src={w.icon} alt={w.name} width={32} height={32} className="w-8 h-8 rounded-lg" unoptimized />
                                             )}
                                             <span className="font-bold text-white capitalize">{w.name}</span>
                                         </div>

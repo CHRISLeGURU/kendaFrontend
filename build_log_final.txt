@@ -1,0 +1,47 @@
+
+> kenda-frontend@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.33
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ⚠ Compiled with warnings
+
+./node_modules/@sidan-lab/sidan-csl-rs-browser/sidan_csl_rs_bg.wasm
+The generated code contains 'async/await' because this module is using "asyncWebAssembly".
+However, your target environment does not appear to support 'async/await'.
+As a result, the code may not run as expected or may cause runtime errors.
+
+Import trace for requested module:
+./node_modules/@sidan-lab/sidan-csl-rs-browser/sidan_csl_rs_bg.wasm
+./node_modules/@sidan-lab/sidan-csl-rs-browser/sidan_csl_rs.js
+./node_modules/@meshsdk/core-csl/dist/index.cjs
+./node_modules/@meshsdk/wallet/dist/index.cjs
+./node_modules/@meshsdk/react/dist/index.cjs
+./components/layout/NavigationWrapper.tsx
+
+   Linting and checking validity of types ...
+
+./components/driver/DriverDashboard.tsx
+65:8  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+94:8  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+184:8  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./components/map/MapComponent.tsx
+234:8  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+Failed to compile.
+
+./services/driverService.ts:131:26
+Type error: Cannot find name 'createClient'.
+
+[0m [90m 129 |[39m [36mexport[39m [36masync[39m [36mfunction[39m getDriverStats(userId[33m:[39m string)[33m:[39m [33mPromise[39m[33m<[39m[33mApiResponse[39m[33m<[39m[33mDriverStats[39m[33m>>[39m {[0m
+[0m [90m 130 |[39m     [36mtry[39m {[0m
+[0m[31m[1m>[22m[39m[90m 131 |[39m         [36mconst[39m supabase [33m=[39m createClient()[33m;[39m[0m
+[0m [90m     |[39m                          [31m[1m^[22m[39m[0m
+[0m [90m 132 |[39m         [36mconst[39m startOfToday [33m=[39m [36mnew[39m [33mDate[39m()[33m;[39m[0m
+[0m [90m 133 |[39m         startOfToday[33m.[39msetHours([35m0[39m[33m,[39m [35m0[39m[33m,[39m [35m0[39m[33m,[39m [35m0[39m)[33m;[39m[0m
+[0m [90m 134 |[39m[0m
+Next.js build worker exited with code: 1 and signal: null

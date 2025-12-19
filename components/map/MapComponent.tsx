@@ -408,7 +408,7 @@ const MapComponent = (props: MapComponentProps) => {
                                 onClick={() => onRideSelect?.(ride)}
                                 className="w-full bg-[#F0B90B] text-black text-[10px] py-1 rounded font-bold"
                             >
-                                VOIR L'OFFRE
+                                VOIR L&apos;OFFRE
                             </button>
                         </div>
                     </Popup>

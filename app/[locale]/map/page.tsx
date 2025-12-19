@@ -13,6 +13,7 @@ import { type DriverLocation } from "@/types";
 import { fetchNearbyDrivers, createRide, subscribeToRide, getRideStatus } from "@/services/rideService";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export default function MapPage() {
     const t = useTranslations('Ride');
@@ -352,7 +353,7 @@ export default function MapPage() {
                                 <div className="flex items-center gap-4 w-full">
                                     <div className="w-16 h-16 bg-[#1A1A1A] rounded-2xl flex items-center justify-center border border-white/10 overflow-hidden">
                                         {activeRide.driver?.avatar_url ? (
-                                            <img src={activeRide.driver.avatar_url} alt="" className="w-full h-full object-cover" />
+                                            <Image src={activeRide.driver.avatar_url} alt="Driver" width={64} height={64} className="w-full h-full object-cover" />
                                         ) : (
                                             <span className="text-2xl">👤</span>
                                         )}

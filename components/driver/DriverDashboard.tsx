@@ -283,7 +283,7 @@ export function DriverDashboard() {
                 <div className="flex justify-between items-start">
                     <div className="bg-[#0A0A0A]/90 backdrop-blur-md border border-white/10 rounded-2xl p-4 pointer-events-auto flex gap-6 shadow-2xl">
                         <div className="flex flex-col">
-                            <span className="text-[10px] text-[#9A9A9A] font-bold uppercase tracking-widest mb-1">Aujourd'hui</span>
+                            <span className="text-[10px] text-[#9A9A9A] font-bold uppercase tracking-widest mb-1">Aujourd&apos;hui</span>
                             <span className="text-xl font-heading font-black text-white">{stats?.today_earnings.toLocaleString() || '0'} <span className="text-xs text-[#F0B90B]">FC</span></span>
                         </div>
                         <div className="w-px h-8 bg-white/10 mt-2" />
@@ -362,7 +362,7 @@ export function DriverDashboard() {
                             className="w-full h-16 bg-[#F0B90B] text-black font-black text-lg rounded-2xl flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(240,185,11,0.2)]"
                         >
                             <Power className="w-6 h-6" />
-                            COMMENCER L'SERVICE
+                            COMMENCER L&apos;SERVICE
                         </Button>
                         {filteredRides.length > 0 && (
                             <div className="mt-8 flex items-center justify-center gap-2 text-[#F0B90B] text-xs font-bold uppercase tracking-widest">

@@ -14,8 +14,7 @@ import type {
     Ride
 } from '@/types';
 
-// TODO: Import Supabase client when ready
-// import { supabase } from '@/lib/supabase';
+import { createClient } from '@/lib/supabase/client';
 
 /**
  * Obtient le profil chauffeur de l'utilisateur connecté
@@ -170,7 +169,8 @@ export async function getDriverStats(userId: string): Promise<ApiResponse<Driver
                 month_earnings: 0,
                 completion_rate: 100
             },
-            success: true
+            success: true,
+            error: null
         };
     } catch (error) {
         console.error("Error fetching driver stats:", error);

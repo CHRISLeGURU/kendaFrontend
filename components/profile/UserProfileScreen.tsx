@@ -216,8 +216,8 @@ export function UserProfileScreen({
                                         ride={{
                                             id: ride.id,
                                             from: ride.pickup_address || 'Point de départ',
-                                            to: ride.destination_address || 'Destination',
-                                            price: `${ride.final_price || ride.estimated_price} ${ride.currency}`,
+                                            to: ride.dest_address || 'Destination',
+                                            price: `${ride.final_price || ride.price} ${ride.currency}`,
                                             status: ride.status,
                                             distance: ride.distance_km ? `${ride.distance_km} km` : '--'
                                         }}

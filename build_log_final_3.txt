@@ -1,0 +1,75 @@
+
+> kenda-frontend@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.33
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ⚠ Compiled with warnings
+
+./node_modules/@sidan-lab/sidan-csl-rs-browser/sidan_csl_rs_bg.wasm
+The generated code contains 'async/await' because this module is using "asyncWebAssembly".
+However, your target environment does not appear to support 'async/await'.
+As a result, the code may not run as expected or may cause runtime errors.
+
+Import trace for requested module:
+./node_modules/@sidan-lab/sidan-csl-rs-browser/sidan_csl_rs_bg.wasm
+./node_modules/@sidan-lab/sidan-csl-rs-browser/sidan_csl_rs.js
+./node_modules/@meshsdk/core-csl/dist/index.cjs
+./node_modules/@meshsdk/wallet/dist/index.cjs
+./node_modules/@meshsdk/react/dist/index.cjs
+./components/layout/NavigationWrapper.tsx
+
+   Linting and checking validity of types ...
+
+./components/driver/DriverDashboard.tsx
+65:8  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+94:8  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+184:8  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./components/map/MapComponent.tsx
+234:8  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/6) ...
+   Generating static pages (1/6) 
+   Generating static pages (2/6) 
+   Generating static pages (4/6) 
+ ✓ Generating static pages (6/6)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /_not-found                          880 B          89.6 kB
+├ ƒ /[locale]                            42.7 kB         210 kB
+├ ƒ /[locale]/account                    6.17 kB         193 kB
+├ ƒ /[locale]/activities                 1.19 kB          90 kB
+├ ƒ /[locale]/driver                     3.75 kB         129 kB
+├ ƒ /[locale]/driver-application         9.5 kB          228 kB
+├ ƒ /[locale]/driver-pending             4.83 kB         228 kB
+├ ƒ /[locale]/driver/dashboard           6.68 kB         217 kB
+├ ƒ /[locale]/driver/fines               4.52 kB        1.08 MB
+├ ƒ /[locale]/driver/history             3.96 kB         175 kB
+├ ƒ /[locale]/driver/profile             10.3 kB         209 kB
+├ ƒ /[locale]/driver/wallet              4.08 kB         161 kB
+├ ƒ /[locale]/login                      7.54 kB         231 kB
+├ ƒ /[locale]/map                        9.73 kB         225 kB
+├ ƒ /[locale]/notifications              6.61 kB         116 kB
+├ ƒ /[locale]/rides                      2.22 kB        98.1 kB
+├ ƒ /[locale]/wallet                     113 kB         1.19 MB
+├ ƒ /api/chat                            0 B                0 B
+├ ○ /manifest.webmanifest                0 B                0 B
+└ ○ /sitemap.xml                         0 B                0 B
++ First Load JS shared by all            88.8 kB
+  ├ chunks/2117-90729bd4a8cb6644.js      31.9 kB
+  ├ chunks/fd9d1056-127961adad637737.js  53.6 kB
+  └ other shared chunks (total)          3.24 kB
+
+
+ƒ Middleware                             37.6 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

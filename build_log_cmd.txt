@@ -1,0 +1,47 @@
+
+> kenda-frontend@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.33
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ⚠ Compiled with warnings
+
+./node_modules/@sidan-lab/sidan-csl-rs-browser/sidan_csl_rs_bg.wasm
+The generated code contains 'async/await' because this module is using "asyncWebAssembly".
+However, your target environment does not appear to support 'async/await'.
+As a result, the code may not run as expected or may cause runtime errors.
+
+Import trace for requested module:
+./node_modules/@sidan-lab/sidan-csl-rs-browser/sidan_csl_rs_bg.wasm
+./node_modules/@sidan-lab/sidan-csl-rs-browser/sidan_csl_rs.js
+./node_modules/@meshsdk/core-csl/dist/index.cjs
+./node_modules/@meshsdk/wallet/dist/index.cjs
+./node_modules/@meshsdk/react/dist/index.cjs
+./components/layout/NavigationWrapper.tsx
+
+   Linting and checking validity of types ...
+
+./components/driver/DriverDashboard.tsx
+65:8  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+94:8  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+184:8  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./components/map/MapComponent.tsx
+234:8  Warning: React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+Failed to compile.
+
+./components/profile/UserProfileScreen.tsx:219:54
+Type error: Property 'destination_address' does not exist on type 'Ride'.
+
+[0m [90m 217 |[39m                                             id[33m:[39m ride[33m.[39mid[33m,[39m[0m
+[0m [90m 218 |[39m                                             [36mfrom[39m[33m:[39m ride[33m.[39mpickup_address [33m||[39m [32m'Point de départ'[39m[33m,[39m[0m
+[0m[31m[1m>[22m[39m[90m 219 |[39m                                             to[33m:[39m ride[33m.[39mdestination_address [33m||[39m [32m'Destination'[39m[33m,[39m[0m
+[0m [90m     |[39m                                                      [31m[1m^[22m[39m[0m
+[0m [90m 220 |[39m                                             price[33m:[39m [32m`${ride.final_price || ride.estimated_price} ${ride.currency}`[39m[33m,[39m[0m
+[0m [90m 221 |[39m                                             status[33m:[39m ride[33m.[39mstatus[33m,[39m[0m
+[0m [90m 222 |[39m                                             distance[33m:[39m ride[33m.[39mdistance_km [33m?[39m [32m`${ride.distance_km} km`[39m [33m:[39m [32m'--'[39m[0m
+Next.js build worker exited with code: 1 and signal: null
