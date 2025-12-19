@@ -38,6 +38,11 @@ export function LandingPage() {
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
+                        <a href="https://kenda-pay.vercel.app" target="_blank" rel="noopener noreferrer" className="hidden md:flex">
+                            <Button variant="ghost" className="text-[#9A9A9A] hover:text-white hover:bg-white/5 rounded-full px-4 transition-all">
+                                {t('kendaPayBtn')}
+                            </Button>
+                        </a>
                         <Link href="/login">
                             <Button variant="outline" className="hidden sm:flex border-white/20 text-white hover:bg-white hover:text-black rounded-full px-6 transition-all">
                                 {t('signup')}
@@ -80,7 +85,7 @@ export function LandingPage() {
                                 {t('heroDesc')}
                             </p>
 
-                            <div className="flex flex-col sm:flex-row gap-4">
+                            <div className="flex flex-col sm:flex-row flex-wrap gap-4">
                                 <Link href="/login">
                                     <Button className="w-full sm:w-auto h-14 px-8 bg-[#F0B90B] text-black font-bold text-lg rounded-full hover:bg-[#F0B90B]/90 shadow-lg shadow-[#F0B90B]/20 transition-transform hover:scale-105">
                                         {t('orderRide')}
@@ -92,6 +97,12 @@ export function LandingPage() {
                                         {t('driverBtn')}
                                     </Button>
                                 </Link>
+                                <a href="https://kenda-pay.vercel.app" target="_blank" rel="noopener noreferrer">
+                                    <Button variant="outline" className="w-full sm:w-auto h-14 px-8 border-[#F0B90B]/40 text-white hover:bg-[#F0B90B] hover:text-black rounded-full text-lg font-bold shadow-[0_0_20px_rgba(240,185,11,0.15)] transition-all duration-300 hover:scale-105 group">
+                                        <Wallet className="mr-2 w-5 h-5 text-[#F0B90B] group-hover:text-black transition-colors" />
+                                        {t('kendaPayBtn')}
+                                    </Button>
+                                </a>
                             </div>
                         </motion.div>
 

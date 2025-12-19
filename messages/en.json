@@ -90,7 +90,8 @@
         "footerDev": "Developed for Ada Prisma Hackathon",
         "footerAbout": "About",
         "footerPrivacy": "Privacy",
-        "footerContact": "Contact"
+        "footerContact": "Contact",
+        "kendaPayBtn": "Kenda Pay & Fines"
     },
     "Ride": {
         "whereTo": "Where to?",

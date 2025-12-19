@@ -90,7 +90,8 @@
         "footerDev": "Imeandaliwa kwa Hackathon ya Ada Prisma",
         "footerAbout": "Kuhusu",
         "footerPrivacy": "Faragha",
-        "footerContact": "Mawasiliano"
+        "footerContact": "Mawasiliano",
+        "kendaPayBtn": "Kenda Pay na Faini"
     },
     "Ride": {
         "whereTo": "Unakwenda wapi?",
